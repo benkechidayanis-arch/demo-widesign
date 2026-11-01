@@ -27,7 +27,10 @@ def ren(m):
             if max(im.size) > 1400:
                 im.thumbnail((1400, 1400), Image.LANCZOS)
             n = 'm/' + secrets.token_hex(6) + '.webp'
-            im.save(os.path.join(out, n), 'WEBP', quality=70, method=6)
+            if ext == 'webp' and max(Image.open(src).size) <= 1400:
+                shutil.copy(src, os.path.join(out, n))  # déjà optimisée : pas de nouvelle compression
+            else:
+                im.save(os.path.join(out, n), 'WEBP', quality=70, method=6)
             t = im.copy()
             t.thumbnail((40, 40), Image.LANCZOS)
             t = t.filter(ImageFilter.GaussianBlur(1.2))
