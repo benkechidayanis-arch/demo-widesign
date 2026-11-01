@@ -80,7 +80,7 @@ if amorce:
     if r.returncode:
         sys.exit('ÉCHEC : lecture du dépôt GitHub : ' + r.stderr[-300:])
     for n in os.listdir(tmp):
-        if n in ('.git', 'CNAME', 'diag', '.github', '_moteur', 'README.md', '.nojekyll'):
+        if n in ('.git', 'CNAME', 'diag', '.github', '_moteur', '_banque', 'README.md', '.nojekyll'):
             continue
         src = os.path.join(tmp, n)
         (shutil.copytree if os.path.isdir(src) else shutil.copy2)(src, os.path.join(SITE, n))
