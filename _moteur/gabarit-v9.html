@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<!-- sources : oriol.fr (accueil, histoire, expertise, moyens et certifications, bureau d'études, solutions, réalisations : stade Geoffroy-Guichard, Zénith, Musée de la Mine, Compagnons du Devoir, Technologie Services, Hôpital privé Est Lyonnais, Immeuble Thimonnier, actualité héliportage CHU), fiche Google (note, horaires) -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1D1E1C">
+<title>Oriol, chauffage, climatisation et plomberie à Saint-Étienne depuis 1943</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* famille de marque tirée du logo (anthracite #323230) */
+  --b950:#181917; --b900:#1E1F1D; --b920:#1B1C1A; --b880:#161715; --b860:#222321; --b840:#272826; --b820:#2E2F2C; --b800:#2B2C29; --b600:#41433E;
+  --line:#353633; --line2:#3B3C39; --soft:rgba(217,217,217,.18);
+  /* accent unique : couleur dominante du site du prospect (couleur_site.py) */
+  --acc:#E1001A; --acc-ring:rgba(120,0,14,.45); --acc-ink:#FFFFFF; --acc-txt:#FF4255; --accd:#A40013;
+  --sage:#DEDBD6; --sage-ring:rgba(99,95,90,.42);
+  /* neutre clair pour alterner */
+  --cream:#F2F1EC; --cream2:#EAE9E2; --cream-pill:#E1E0D8; --faq:#E9E8E1; --faq-on:#FBFAF6;
+  /* couleurs secondaires du logo, en touches */
+  --rouge:#E1001A; --bleu:#009DDF; --vert:#009640;
+  --grad-card:linear-gradient(180deg,#232422 0%,#3A3C37 100%);
+  --grad-panel:linear-gradient(180deg,#141513 0%,#3F4339 100%);
+  --font:"Bricolage Grotesque",system-ui,sans-serif;
+  --container:1270px; --g:18px;
+  --r-card:15px; --r-bar:10px; --r-btn:5px;
+  --e1:cubic-bezier(.22,1,.36,1); --e2:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
+body{font-family:var(--font);font-size:15.5px;line-height:1.55;color:#fff;background:var(--b950);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body:before{content:"";position:fixed;inset:0;background:var(--b950);z-index:200;pointer-events:none;animation:pagein .7s .05s ease-out forwards}
+@keyframes pagein{to{opacity:0;visibility:hidden}}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.c{max-width:var(--container);margin:0 auto;padding:0 var(--g)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+strong{font-weight:600}
+
+/* typographie */
+.h1v{font-weight:500;font-size:44px;line-height:.8;letter-spacing:-.01em}
+.h2{font-weight:500;font-size:36px;line-height:.88;text-wrap:balance}
+.h3{font-weight:500;font-size:23px;line-height:1.08}
+.lead{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.78)}
+.on-cream{color:var(--b900)}
+.on-cream .lead{color:#4A4B46}
+
+/* pilules */
+.pill{display:inline-block;align-self:flex-start;font-weight:500;font-size:13px;line-height:22px;padding:6px 15px;border-radius:100px;background:rgba(255,255,255,.12);color:#fff}
+.on-cream .pill{background:var(--cream-pill);color:var(--b900)}
+.ctr{text-align:center;display:flex;flex-direction:column;align-items:center}
+.ctr .pill{align-self:center}
+.head{display:flex;flex-direction:column;gap:16px}
+
+/* boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:15px;line-height:26px;padding:12px 20px;border-radius:var(--r-btn);border:4px solid var(--acc-ring);background:var(--acc);color:var(--acc-ink);white-space:nowrap;transition:filter .2s,transform .2s}
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:color .3s var(--e1),scale .2s var(--e1)}
+/* fond animé au survol : deux disques qui naissent à l'endroit où le curseur entre et repartent par où il sort */
+.bf{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.bf i{position:absolute;left:var(--ox,50%);top:var(--oy,50%);width:var(--d,300px);height:var(--d,300px);margin:calc(var(--d,300px)/-2) 0 0 calc(var(--d,300px)/-2);border-radius:50%;scale:0;transition:scale .6s cubic-bezier(.32,.72,0,1)}
+.bf i:nth-child(1){background:var(--accd)}
+.bf i:nth-child(2){background:var(--b900);transition-delay:.06s}
+.btn.on .bf i{scale:1}
+.btn.on .bf i:nth-child(1){transition-delay:0s}
+.btn.on .bf i:nth-child(2){transition-delay:.08s}
+.btn.s .bf i:nth-child(1){background:#fff}
+.btn.s{transition:color .2s ease .22s,scale .2s var(--e1)}
+.btn.s.on{color:#fff;transition:color .2s ease .1s,scale .2s var(--e1)}
+.btn:active{scale:.97}
+.btn.s{background:var(--sage);border-color:var(--sage-ring);color:var(--b900)}
+.btn svg{width:17px;height:17px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+
+/* apparitions (fidèles au gabarit de référence : mots, puis éléments, puis boutons) */
+.w{display:inline-block;clip-path:inset(-.6em -.4em -.3em -.4em);vertical-align:top}
+.wi{display:inline-block;transform:translateY(200%);transition:transform .9s var(--e1)}
+.split.on .wi{transform:none}
+.fx{opacity:0;transform:translateY(22px);transition:opacity .9s var(--e2),transform .9s var(--e2)}
+.fx.on{opacity:1;transform:none}
+.zoom{overflow:hidden}
+.zoom>img{transform:scale(1.06);transition:transform 2.6s var(--e2)}
+.zoom.on>img{transform:none}
+
+/* en-tête */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:90;padding:12px 2% 0;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.hdr.cache{transform:translateY(-110%)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 6px 0 14px;border-radius:var(--r-bar);background:rgba(22,23,21,.92);backdrop-filter:blur(10px)}
+.logo{display:block;height:28px}
+.logo svg{height:100%;width:auto;display:block}
+.nav{display:none}
+.bar .btns{display:none}
+.burger{width:44px;height:44px;display:grid;place-items:center;color:var(--acc)}
+.mact{display:flex;align-items:center;gap:6px}
+.mtel{width:44px;height:44px;border-radius:var(--r-btn);display:grid;place-items:center;background:var(--sage);border:3px solid var(--sage-ring);color:var(--b900)}
+.mtel svg{width:18px;height:18px}
+.mdev{padding:6px 12px;font-size:14px;line-height:24px;border-width:3px}
+.burger svg{width:26px;height:26px}
+.off{position:fixed;inset:0;z-index:150;background:var(--b900);padding:90px 30px 40px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.off.on{opacity:1;visibility:visible}
+.off a.l{font-size:22px;font-weight:500;padding:6px 0}
+.off .x{position:absolute;top:22px;right:22px;color:var(--acc)}
+.off .x svg{width:34px;height:34px}
+.off .btns{margin-top:22px;justify-content:center}
+.off .logo{height:40px;margin-bottom:26px}
+
+/* hero */
+.hero{position:relative;min-height:max(720px,100svh);padding:108px 0 92px;display:flex;flex-direction:column;overflow:hidden;background:var(--b950)}
+.hero>.c{flex:1;width:100%}
+.hero .tx{flex:1}
+.hero .tx>.btns{margin-top:auto}
+.hb{opacity:0;transform:translateY(22px);animation:hbin .9s var(--e2) 1.3s forwards}
+@keyframes hbin{to{opacity:1;transform:none}}
+.hero .bg{position:absolute;inset:0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;object-position:50% 100%;transform:scale(1.06);animation:dz 3.2s cubic-bezier(.25,.46,.45,.94) .2s forwards}
+@keyframes dz{to{transform:none}}
+.hero .bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,13,.9) 0%,rgba(14,15,13,.72) 36%,rgba(14,15,13,.08) 58%,rgba(14,15,13,0) 72%,rgba(14,15,13,.55) 100%)}
+.hero .c{position:relative;display:flex;flex-direction:column;gap:18px}
+.hero .pill{background:rgba(255,255,255,.08);backdrop-filter:blur(6px)}
+.note{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500}
+.stars{display:flex;gap:2px}
+.stars svg{width:15px;height:15px}
+.note u{text-underline-offset:3px}
+.sub{font-weight:700;font-size:13px;line-height:20px}
+.sub i{font-style:normal;color:var(--acc);padding:0 3px}
+.hero .lead{max-width:34ch;font-size:15px}
+.stairs{display:none}
+.hero .btns{flex-wrap:nowrap}.hero .btns .btn{flex:1 1 auto;padding:11px 12px}
+
+/* ===== v9 : après le hero, tout passe au clair et aux photos ===== */
+:root{--w:#FFFFFF; --cr:#F4F2EE; --cr2:#ECE9E3; --ink:#1A1B19; --mut:#5D5F59; --ln:#E3E0D9; --r-ph:18px}
+.chk{flex:none;width:32px;height:32px}
+.chipw{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--b900);font-weight:600;font-size:12px;padding:5px 11px 5px 5px;border-radius:100px}
+.chipw .chk{width:20px;height:20px}
+.lt{background:var(--w);color:var(--ink)}
+.lt.cr{background:var(--cr)}
+.lt .pill{background:var(--cr2);color:var(--ink)}
+.lt.cr .pill{background:#fff}
+.lt .lead{color:var(--mut)}
+.sec{padding:72px 0}
+.kick{display:flex;flex-direction:column;gap:14px;margin-bottom:30px}
+.kick.ctr{align-items:center;text-align:center}
+.kick .lead{max-width:44ch}
+.ph-r{position:relative;border-radius:var(--r-ph);overflow:hidden;background:var(--cr2)}
+.ph-r>img{width:100%;height:100%;object-fit:cover}
+.ph-r.zoom>img{transform:scale(1.08)}
+.ph-r.zoom.on>img{transform:none}
+.veil:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,13,0) 45%,rgba(14,15,13,.78) 100%);pointer-events:none}
+.go{flex:none;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;transition:transform .3s var(--e1)}
+.go svg{width:18px;height:18px}
+
+/* vague du hero vers le blanc */
+.wv{display:block;width:100%;height:46px;color:var(--w);margin:-45px 0 0;position:relative;z-index:3}
+
+/* preuves : labels qui défilent */
+.proofs{padding:26px 0 30px;background:var(--w);color:var(--ink);overflow:hidden}
+.rate{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:15px}
+.rate .stars svg{width:18px;height:18px}
+.rate span{color:var(--mut);font-weight:500}
+.mq{display:flex;width:max-content;animation:mq 28s linear infinite}
+.mq ul{display:flex;gap:10px;padding-right:10px;list-style:none}
+.mq li{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1.5px solid var(--ln);border-radius:100px;padding:8px 15px 8px 8px;font-weight:600;font-size:14px}
+.mq li .chk{width:22px;height:22px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* chiffres géants */
+.numc{background:var(--cr);border-radius:24px;padding:6px 20px;border-top:0!important}
+.numc .nb:nth-last-child(-n+2){border-bottom:0}
+.numc .nb{text-align:center;padding:22px 8px 20px!important}
+.numc .nb span{display:block;margin:10px auto 0;max-width:15ch}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1.5px solid var(--ln)}
+.nb{padding:22px 4px 20px;border-bottom:1.5px solid var(--ln)}
+.nb:nth-child(odd){padding-right:14px;border-right:1.5px solid var(--ln)}
+.nb:nth-child(even){padding-left:18px}
+.nb b{display:block;white-space:nowrap;font-weight:500;font-size:44px;line-height:.9;letter-spacing:-.03em;color:var(--acc);font-variant-numeric:tabular-nums}
+.nb b i{font-style:normal}
+.nb b small{font-size:.5em;letter-spacing:0;margin-left:3px}
+.nb span{display:block;margin-top:10px;font-size:14px;line-height:1.35;color:var(--mut);max-width:16ch}
+
+/* métiers : une grande carte puis une grille de photos */
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mtc{position:relative;display:flex;align-items:flex-end;min-height:230px;border-radius:var(--r-ph);overflow:hidden;color:#fff;background:var(--cr2)}
+.mtc>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e1)}
+.mtc:hover>img{transform:scale(1.05)}
+.mtc .cap{position:relative;z-index:2;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px}
+.mtc .cap b{font-weight:500;font-size:18px;line-height:1.05}
+.mtc .cap small{display:block;font-size:12.5px;opacity:.82;margin-top:5px;line-height:1.3}
+.mtc.big{grid-column:1/-1;min-height:340px}
+.mtc.big .cap{padding:20px}
+.mtc.big .cap b{font-size:28px}
+.mtc .go{width:36px;height:36px}
+
+/* réalisations : une vedette, puis une grille */
+.feat{position:relative;height:440px;color:#fff}
+.feat .in{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:22px 20px}
+.feat .yr2{position:absolute;left:14px;top:14px;z-index:2;background:rgba(255,255,255,.92);color:var(--ink);font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:100px}
+.feat h3{font-weight:500;font-size:28px;line-height:1}
+.feat p{font-size:14px;opacity:.85;margin-top:8px}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.tags span{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:100px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25)}
+.tags span.a{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;margin-top:14px}
+.rc .ph-r{aspect-ratio:4/5}
+.rc h4{font-weight:500;font-size:16px;line-height:1.15;margin-top:10px}
+.rc p{font-size:12.5px;color:var(--mut);margin-top:4px;line-height:1.3}
+
+/* bandeau couleur de marque : le bureau d'études */
+.brand{position:relative;background:var(--acc);color:var(--acc-ink);overflow:hidden}
+.brand .c{position:relative;z-index:2}
+.brand .pill{background:rgba(255,255,255,.18);color:#fff}
+.brand .h2{color:#fff}
+.brand .lead{color:rgba(255,255,255,.9)}
+.brand .grid{display:grid;gap:26px}
+.brand .ph-r{height:300px;border:6px solid rgba(255,255,255,.18)}
+.bul{list-style:none;display:grid;gap:10px;margin-top:6px}
+.bul li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;line-height:1.4;font-weight:500}
+.bul li i{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--acc);display:grid;place-items:center;font-style:normal;margin-top:-1px}
+.bul li i svg{width:14px;height:14px}
+.brand .sym{color:#fff;opacity:.08;width:520px;right:-160px;top:-60px}
+.brand .btn{background:#fff;color:var(--ink);border-color:rgba(255,255,255,.35)}
+.brand .btn .bf i:nth-child(1){background:var(--b900)}
+.brand .btn.on{color:#fff}
+
+/* l'entreprise */
+.team2 .ph-r{height:360px}
+.team2 .tagn{position:absolute;left:14px;bottom:14px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.team2 .tagn .nm{background:#fff;color:var(--ink);font-weight:600;font-size:15px;padding:7px 11px;border-radius:6px}
+.team2 .tx{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.team2 .tx p{font-size:15.5px;line-height:1.6;color:var(--mut)}
+.team2 .tx strong{color:var(--ink)}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.mini div{background:#fff;border-radius:14px;padding:14px 14px 12px}
+.mini b{display:block;font-weight:500;font-size:30px;line-height:.9;color:var(--ink)}
+.mini span{display:block;font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.3}
+
+/* méthode : frise verticale */
+.tl{list-style:none;position:relative;display:grid;gap:22px;padding-left:58px}
+.tl:before{content:"";position:absolute;left:21px;top:8px;bottom:8px;width:2px;background:var(--ln)}
+.tl li{position:relative}
+.tl .n{position:absolute;left:-58px;top:-2px;width:44px;height:44px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-weight:600;font-size:17px;box-shadow:0 0 0 6px var(--w)}
+.tl h3{font-weight:500;font-size:21px;line-height:1.1}
+.tl p{font-size:14.5px;line-height:1.5;color:var(--mut);margin-top:6px}
+.tl .ph-r{height:150px;margin-top:12px}
+
+/* zone */
+.cities{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;list-style:none}
+.cities li{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--ln);border-radius:376px;padding:8px 13px 8px 8px;font-weight:500;font-size:14px;transition:transform .3s}
+.cities li:hover{transform:rotate(-4deg)}
+.cities svg{width:18px;height:22px}
+
+/* faq claire */
+.acc{display:grid;gap:10px}
+.q{border-radius:14px;background:#fff;overflow:hidden;border:1.5px solid var(--ln)}
+.q button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:left;padding:16px 16px 16px 18px;font-weight:500;font-size:15.5px;line-height:1.25;color:var(--ink)}
+.q button svg{flex:none;width:24px;height:24px;transition:transform .3s;color:var(--acc)}
+.q .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--e2)}
+.q .a>div{overflow:hidden}
+.q .a p{padding:0 46px 18px 18px;font-size:14.5px;line-height:1.55;color:var(--mut)}
+.q.on .a{grid-template-rows:1fr}
+.q.on button svg{transform:rotate(180deg)}
+
+/* appel final : le seul moment sombre après le hero */
+.fin{position:relative;color:#fff;overflow:hidden;background:var(--b900)}
+.fin>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.fin:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,13,.55) 0%,rgba(14,15,13,.82) 100%)}
+.fin .c{position:relative;z-index:2;padding-top:96px;padding-bottom:96px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.fin .pill{background:rgba(255,255,255,.14)}
+.fin .btns{justify-content:center;margin-top:8px}
+.fin .reas{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;list-style:none;margin-top:6px}
+.fin .reas li{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;border:1.5px solid rgba(255,255,255,.25);border-radius:100px;padding:5px 12px 5px 5px}
+.fin .reas .chk{width:20px;height:20px}
+
+/* contact clair */
+.big-tel{display:flex;align-items:center;gap:14px;background:var(--cr);border-radius:18px;padding:18px}
+.big-tel i{flex:none;width:52px;height:52px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center}
+.big-tel i svg{width:22px;height:22px}
+.big-tel span{display:block;font-size:13px;color:var(--mut)}
+.big-tel b{display:block;font-weight:600;font-size:24px;letter-spacing:-.01em}
+.coord2{display:grid;gap:10px;margin-top:10px}
+.coord2 div{display:flex;gap:12px;align-items:flex-start;padding:4px 2px;font-size:14.5px;line-height:1.45}
+.coord2 svg{flex:none;width:20px;height:20px;color:var(--acc);margin-top:1px}
+.ctg{display:grid;gap:26px}
+form{display:grid;gap:10px;background:var(--cr);border-radius:18px;padding:18px}
+input,select,textarea{font:inherit;font-size:15px;border:1.5px solid var(--ln);border-radius:10px;padding:14px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:110px;resize:vertical}
+form .btn{width:100%;padding:14px}
+.ok{font-size:14px;color:var(--acc);display:none}
+.sym{position:absolute;pointer-events:none}
+.sym svg{width:100%;height:auto;display:block}
+.sym svg *{fill:currentColor!important}
+
+
+/* ===== v9b ===== */
+.h2 em,.h1v em{font-style:normal;color:var(--acc)}
+.brand .h2 em,.fin .h2 em{color:#fff;opacity:.72}
+.fin .pill{align-self:center}
+
+/* métiers : mosaïque variée */
+.mt{grid-auto-rows:150px;grid-auto-flow:dense}
+.mtc{min-height:0!important}
+.mtc.big{grid-column:1/-1;grid-row:span 2}
+.mtc.tall{grid-row:span 2}
+.mtc.wide{grid-column:1/-1}
+.mtc .no{position:absolute;left:12px;top:12px;z-index:2;font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:4px 9px;border-radius:100px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.28)}
+
+/* réalisations : cartes qui s'empilent au défilement */
+.stack{display:flex;flex-direction:column;gap:16px}
+.stk{position:sticky;top:calc(84px + var(--i) * 12px);height:min(560px,72svh);border-radius:22px;overflow:hidden;color:#fff;background:var(--b900);transform-origin:50% 0;will-change:transform;box-shadow:0 -10px 30px rgba(0,0,0,.12)}
+.stk>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.stk:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,13,.28) 0%,rgba(14,15,13,0) 30%,rgba(14,15,13,0) 45%,rgba(14,15,13,.85) 100%)}
+.stk .top{position:absolute;left:16px;right:16px;top:16px;z-index:2;display:flex;justify-content:space-between;align-items:center}
+.stk .yr2{position:static;background:rgba(255,255,255,.94);color:var(--ink);font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:100px}
+.stk .cnt{font-size:12.5px;font-weight:600;opacity:.85}
+.stk .in{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:22px 20px}
+.stk h3{font-weight:500;font-size:30px;line-height:1}
+.stk p{font-size:14px;opacity:.86;margin-top:8px;max-width:40ch}
+
+/* bande de photos de chantiers */
+.strip{padding:0 0 72px;background:var(--w);overflow:hidden}
+.strip .row{display:flex;width:max-content;gap:10px;animation:mq 46s linear infinite}
+.strip .row+.row{margin-top:10px;animation-direction:reverse;animation-duration:52s}
+.strip .row div{display:flex;gap:10px}
+.strip img{width:210px;height:150px;object-fit:cover;border-radius:14px}
+
+/* l'entreprise : collage, sceau et dates */
+.co{position:relative;padding:0 0 70px}
+.co .main{height:400px;border-radius:22px}
+.co .sec2{position:absolute;right:-6px;bottom:0;width:48%;height:190px;border-radius:18px;border:6px solid var(--cr);overflow:hidden}
+.co .sec2 img{width:100%;height:100%;object-fit:cover}
+.seal{position:absolute;left:-8px;top:-26px;z-index:3;width:116px;height:116px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.seal svg.ring{position:absolute;inset:0;width:100%;height:100%;animation:tour 22s linear infinite}
+.seal .ctr2{width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.seal .ctr2 svg{width:30px;height:30px}
+@keyframes tour{to{transform:rotate(360deg)}}
+.co .tagn{position:absolute;left:14px;bottom:86px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.co .tagn .nm{background:#fff;color:var(--ink);font-weight:600;font-size:14px;padding:7px 11px;border-radius:6px}
+.ent .tx{display:flex;flex-direction:column;gap:16px;margin-top:34px}
+.ent .tx>p{font-size:15.5px;line-height:1.6;color:var(--mut)}
+.ent .tx strong{color:var(--ink)}
+.dates{list-style:none;display:grid;gap:0;margin-top:6px;border-left:2px solid var(--ln);margin-left:8px}
+.dates li{position:relative;padding:0 0 18px 22px}
+.dates li:before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--w);border:2.5px solid var(--acc)}
+.dates li:last-child{padding-bottom:0}
+.dates b{display:block;font-weight:500;font-size:26px;line-height:1;color:var(--acc);letter-spacing:-.02em}
+.dates span{display:block;font-size:14.5px;line-height:1.4;color:var(--ink);margin-top:4px}
+
+/* méthode : quatre étapes en photos */
+.steps2{list-style:none;display:grid;gap:14px}
+.stp{background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid var(--ln)}
+.stp .ph{position:relative;aspect-ratio:16/10;overflow:hidden}
+.stp .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e1)}
+.stp:hover .ph img{transform:scale(1.04)}
+.stp .n{position:absolute;left:14px;top:14px;width:42px;height:42px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-weight:600;font-size:17px;box-shadow:0 0 0 5px rgba(255,255,255,.35)}
+.stp .tx{padding:18px 18px 20px}
+.stp h3{font-weight:500;font-size:21px;line-height:1.1}
+.stp p{font-size:14.5px;line-height:1.5;color:var(--mut);margin-top:6px}
+
+/* zone : villes + carte */
+.zg{display:grid;gap:26px}
+.zg .kick{margin-bottom:0}
+.mapc{position:relative;border-radius:24px;overflow:hidden;background:#15120F;color:var(--acc)}
+.mapv{position:relative;aspect-ratio:1/1}
+.mapc .carte{width:100%;height:100%;display:block}
+.vrows{display:grid;gap:9px;padding:6px 0 20px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.vrow{display:flex;width:max-content;animation:mq 34s linear infinite}
+.vrow:nth-child(2){animation-direction:reverse;animation-duration:40s}
+.vrow:nth-child(3){animation-duration:46s}
+.vrow ul{display:flex;gap:9px;padding-right:9px;list-style:none}
+.vrow li{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.14);border-radius:100px;color:#fff;font-weight:500;font-size:13.5px;padding:7px 13px 7px 8px}
+.vrow svg{width:16px;height:20px}
+.mapc:hover .vrow{animation-play-state:paused}
+.mapc .trace{stroke-dasharray:1;stroke-dashoffset:1}
+.mapc.on .trace{animation:trace 2.6s cubic-bezier(.6,0,.2,1) .2s forwards}
+.mapc .pouls{transform-box:fill-box;transform-origin:center;animation:pouls 2.4s ease-out infinite}
+@keyframes trace{to{stroke-dashoffset:0}}
+@keyframes pouls{0%{transform:scale(.4);opacity:1}100%{transform:scale(2.6);opacity:0}}
+.mapc .lab{position:absolute;left:58%;top:38%;z-index:2;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);color:#fff;font-weight:600;font-size:14px;padding:7px 13px;border-radius:12px;opacity:0;transform:translateY(8px);transition:opacity .6s 1.6s,transform .6s 1.6s}
+.mapc.on .lab{opacity:1;transform:none}
+.mapc .leg{position:absolute;left:16px;bottom:14px;z-index:2;color:rgba(255,255,255,.72);font-size:12.5px}
+
+/* avis Google */
+.avh{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 30px;margin-bottom:34px}
+.avh .kick{margin-bottom:0}
+.score{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}
+.score b{font-weight:500;font-size:64px;line-height:.8;letter-spacing:-.04em}
+.score .stars svg{width:20px;height:20px}
+.score small{display:block;color:var(--mut);font-size:14px;margin-top:6px}
+.score small u{text-underline-offset:3px}
+.avs{display:grid;gap:14px;list-style:none}
+.av{display:flex;flex-direction:column;gap:18px;background:var(--cr);border-radius:22px;padding:24px 22px 22px}
+.av .stars svg{width:17px;height:17px}
+.av q{quotes:none;font-size:16px;line-height:1.6;color:var(--ink)}
+.av q:before{content:"«\00a0"}.av q:after{content:"\00a0»"}
+.av .who{margin-top:auto;display:flex;align-items:center;gap:12px}
+.av .ini{flex:none;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--acc);display:grid;place-items:center;font-weight:600;font-size:16px}
+.av .who b{display:block;font-weight:600;font-size:15px}
+.av .who span{color:var(--mut);font-size:13px}
+.av.one{background:var(--acc);color:var(--acc-ink)}
+.av.one q{color:var(--acc-ink);font-size:19px;line-height:1.5;font-weight:500}
+.av.one .who span{color:inherit;opacity:.75}
+.avsrc{margin-top:14px;color:var(--mut);font-size:12.5px}
+.av .who a{color:inherit;text-decoration:none}
+.av.one .ini{background:rgba(255,255,255,.18);color:var(--acc-ink)}
+
+/* contact : trois blocs */
+.blk{display:flex;align-items:center;gap:14px;background:var(--cr);border-radius:18px;padding:16px 18px}
+.blk+.blk{margin-top:10px}
+.blk i{flex:none;width:48px;height:48px;border-radius:14px;background:#fff;color:var(--acc);display:grid;place-items:center}
+.blk i svg{width:22px;height:22px}
+.blk span{display:block;font-size:13px;color:var(--mut)}
+.blk b{display:block;font-weight:600;font-size:16px;line-height:1.35;color:var(--ink)}
+.blk.tel{background:var(--acc);color:var(--acc-ink)}
+.blk.tel i{background:rgba(255,255,255,.18);color:#fff;border-radius:50%}
+.blk.tel span{color:rgba(255,255,255,.85)}
+.blk.tel b{color:#fff;font-size:24px;letter-spacing:-.01em}
+.blk .go2{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center}
+.blk .go2 svg{width:16px;height:16px}
+
+/* pied */
+footer{background:var(--b900);padding:10px 0 110px}
+.fcard{background:var(--b880);border:2px solid var(--line);border-radius:var(--r-card);padding:46px 20px 26px;display:grid;gap:34px;text-align:center}
+.fcard .logo{height:46px;margin:0 auto}
+.fcard h4{font-weight:500;font-size:26px;line-height:1;margin-bottom:12px}
+.fcard ul{list-style:none;display:grid;gap:4px;font-weight:300;font-size:14px}
+.fcard ul a:hover{color:var(--acc)}
+.legal{font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.6}
+.legal b{color:#fff;font-weight:500}
+
+/* barre d'appel mobile */
+.callbar{position:fixed;left:10px;right:10px;bottom:10px;z-index:80;display:flex;gap:8px;padding:6px;border-radius:12px;background:rgba(22,23,21,.92);backdrop-filter:blur(12px);transform:translateY(150%);transition:transform .45s var(--e1)}
+.callbar.on{transform:none}
+.callbar .btn{flex:1;padding:10px 12px}
+@media(min-width:1024px){
+  :root{--g:20px}
+  :root{--g:20px}
+  body{font-size:17px}
+  .h1v{font-size:clamp(64px,6.3vw,91px)}
+  .h2{font-size:clamp(46px,4.2vw,60px);line-height:.8}
+  .h3{font-size:30px;line-height:1}
+  .lead{font-size:18px;line-height:1.67}
+  .pill{font-size:17px;line-height:31px;padding:4px 16px 4px 15px}
+  .btn{font-size:17px;line-height:31px;padding:12px 28px}
+  .hdr{padding:20px 30px 0}
+  .bar{height:84px;padding:5px 10px 5px 22px}
+  .logo{height:46px}
+  .nav{display:flex;gap:32px;font-weight:500;font-size:16px}
+  .nav a:hover{color:var(--acc)}
+  .bar .btns{display:flex}
+  .bar .btn{padding:10px 16px;font-size:15.5px;line-height:26px}
+  .mact{display:none}
+  .hero{min-height:max(780px,100vh);padding:150px 0 190px;flex-direction:row;align-items:center}
+  .hero .tx>.btns{margin-top:0}
+  .hero>.c{width:100%}
+  .hero .bg img{object-position:50% 60%}
+  .hero .bg:after{background:linear-gradient(90deg,rgba(14,15,13,.9) 0%,rgba(14,15,13,.6) 40%,rgba(14,15,13,.1) 70%),linear-gradient(180deg,rgba(14,15,13,.5) 0,rgba(14,15,13,0) 30%)}
+  .hero .c{display:grid;grid-template-columns:1fr auto;align-items:center}
+  .hero .btns .btn{flex:none;padding:12px 28px}
+  .hero .tx{display:flex;flex-direction:column;gap:26px;max-width:860px}
+  .note,.sub{font-size:16px}
+  .hero .lead{font-size:18px;max-width:46ch}
+  .stairs{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+  .stairs .chipw{font-size:16px;padding:8px 18px 8px 8px}
+  .stairs .chipw .chk{width:28px;height:28px}
+  .stairs .chipw:nth-child(2){margin-right:37px;opacity:.92}.stairs .chipw:nth-child(3){margin-right:74px;opacity:.82}.stairs .chipw:nth-child(4){margin-right:111px;opacity:.65}
+  /* v9 */
+  .sec{padding:120px 0}
+  .kick{margin-bottom:46px}
+  .wv{height:110px;margin-top:-109px}
+  .proofs{padding:34px 0 40px}
+  .rate{font-size:18px}
+  .mq li{font-size:16px;padding:10px 18px 10px 10px}
+  .nums{grid-template-columns:repeat(4,1fr);border-top:0}
+  .nb{border-bottom:0;padding:10px 30px!important;border-right:1.5px solid var(--ln)!important}
+  .nb:last-child{border-right:0!important}
+  .nb b{font-size:clamp(64px,6vw,96px)}
+  .nb span{font-size:16px}
+  .numc{padding:46px 24px;border-radius:28px}
+  .numc .nb{text-align:left;padding:10px 30px!important}
+  .numc .nb span{margin:12px 0 0;max-width:none}
+  .mt{grid-template-columns:repeat(4,1fr);gap:16px}
+  .mtc{min-height:320px}
+  .mtc.big{grid-column:span 2;grid-row:span 2;min-height:656px}
+  .mtc.big .cap b{font-size:40px}
+  .mt .mtc:nth-last-child(-n+2){grid-column:span 2}
+  .mtc .cap b{font-size:22px}
+  .feat{height:620px}
+  .feat .in{padding:44px}
+  .feat h3{font-size:48px}
+  .feat p{font-size:17px}
+  .rg{grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
+  .rc h4{font-size:20px}
+  .rc p{font-size:14.5px}
+  .brand .grid{grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .brand .ph-r{height:520px}
+  .bul li{font-size:18px}
+  .team2 .c{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;align-items:center}
+  .team2 .ph-r{height:620px}
+  .team2 .tx{margin-top:0}
+  .team2 .tx p{font-size:17.5px;line-height:1.7}
+  .mini{grid-template-columns:repeat(4,1fr)}
+  .tl{grid-template-columns:repeat(4,1fr);gap:30px;padding:70px 0 0}
+  .tl:before{left:0;right:0;top:21px;bottom:auto;width:auto;height:2px}
+  .tl .n{left:0;top:-70px}
+  .tl .ph-r{height:200px}
+  .tl p{font-size:16px}
+  .cities{gap:14px;max-width:960px;margin:0 auto}
+  .cities li{font-size:17px;padding:10px 16px 10px 10px}
+  .fq{display:grid;grid-template-columns:1fr 1.3fr;gap:70px;align-items:start}
+  .fq .kick{position:sticky;top:130px}
+  .q button{font-size:19px;padding:20px 22px}
+  .q .a p{font-size:16.5px;padding:0 54px 22px 22px}
+  .fin .c{padding-top:160px;padding-bottom:160px}
+  .ctg{grid-template-columns:5fr 6fr;gap:60px;align-items:start}
+  form{padding:28px}
+
+  /* v9b */
+  .mt{grid-template-columns:repeat(4,1fr);grid-auto-rows:230px}
+  .mtc.big{grid-column:span 2;grid-row:span 2}
+  .mtc.wide{grid-column:span 2}
+  .mt .mtc:nth-last-child(-n+2){grid-column:auto}
+  .stack{max-width:1100px;margin:0 auto;gap:24px}
+  .stk{top:calc(120px + var(--i) * 16px);height:min(640px,78vh)}
+  .stk .in{padding:44px}
+  .stk h3{font-size:52px}
+  .stk p{font-size:17px}
+  .stk .top{left:28px;right:28px;top:28px}
+  .strip{padding-bottom:120px}
+  .strip img{width:340px;height:230px}
+  .ent .c{display:grid;grid-template-columns:1.05fr 1fr;gap:80px;align-items:center}
+  .co{padding:0 0 60px}
+  .co .main{height:620px}
+  .co .sec2{width:46%;height:260px;right:-30px}
+  .co .tagn{bottom:80px;left:24px}
+  .seal{width:150px;height:150px;left:-36px;top:-40px}
+  .seal .ctr2{width:58px;height:58px}.seal .ctr2 svg{width:38px;height:38px}
+  .ent .tx{margin-top:0}
+  .ent .tx>p{font-size:17.5px;line-height:1.7}
+  .dates{grid-template-columns:repeat(4,1fr);border-left:0;border-top:2px solid var(--ln);margin:14px 0 0}
+  .dates li{padding:22px 10px 0 0}
+  .dates li:before{left:0;top:-7px}
+  .dates b{font-size:32px}
+  .steps2{grid-template-columns:repeat(4,1fr);gap:18px}
+  .stp p{font-size:15.5px}
+  .zg{grid-template-columns:1fr 1.05fr;gap:70px;align-items:center}
+  .mapv{aspect-ratio:16/12}
+  .vrows{padding:8px 0 28px}
+  .ctg{align-items:stretch}
+  .avs{grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:auto auto}
+  .av.one{grid-row:span 2;padding:38px 36px 34px}
+  .av:nth-child(4):last-child{grid-column:span 2}
+  .av:nth-child(2):last-child{grid-row:span 2;grid-column:span 2}
+  .av:nth-child(3):last-child{grid-column:span 2}
+  .av.one q{font-size:23px}
+  .av{padding:28px 26px 24px}
+
+  footer{padding:20px 0 60px}
+  .fcard{grid-template-columns:1.2fr 1fr 1fr 1fr;text-align:left;padding:70px 60px 34px;gap:40px}
+  .fcard .logo{margin:0}
+  .fcard h4{font-size:32px}
+  .fcard ul{font-size:16.5px}
+  .legal{grid-column:1/-1;text-align:center;border-top:2px solid var(--line);padding-top:24px}
+  .callbar{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}body:before{display:none}.wi,.fx,.zoom>img{transform:none!important;opacity:1!important}}
+</style>
+</head>
+<body>
+
+<header class="hdr" id="hdr"><div class="bar">
+  <a class="logo" href="#top" aria-label="Oriol, accueil">LOGO_CLIENT</a>
+  <nav class="nav" aria-label="Navigation principale"><a href="#metiers">Métiers</a><a href="#apropos">L'entreprise</a><a href="#realisations">Réalisations</a><a href="#methode">Méthode</a><a href="#questions">Questions</a></nav>
+  <div class="btns"><a class="btn s" href="tel:+33477747718">04 77 74 77 18</a><a class="btn" href="#contact">Demander un devis</a></div>
+  <div class="mact"><a class="mtel" href="tel:+33477747718" aria-label="Appeler Oriol">PHONE</a><a class="btn mdev" href="#contact">Devis</a><button class="burger" id="ouvrir" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button></div>
+</div></header>
+<nav class="off" id="off" aria-label="Menu">
+  <button class="x" id="fermer" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <span class="logo">LOGO_CLIENT</span>
+  <a class="l" href="#metiers">Métiers</a><a class="l" href="#apropos">L'entreprise</a><a class="l" href="#realisations">Réalisations</a><a class="l" href="#methode">Méthode</a><a class="l" href="#questions">Questions</a><a class="l" href="#contact">Contact</a>
+  <div class="btns"><a class="btn s" href="tel:+33477747718">04 77 74 77 18</a><a class="btn" href="#contact">Demander un devis</a></div>
+</nav>
+
+<main id="top">
+<section class="hero">
+  <div class="bg"><img src="img/hero-levage.jpg" alt="Techniciens d'Oriol guidant une unité de climatisation levée par une grue sur le chantier Technologie Services à Marclopt"></div>
+  <div class="c">
+    <div class="tx" style="display:flex;flex-direction:column;gap:18px">
+      <h1 class="pill">Chauffagiste, climaticien et plombier à Saint-Étienne</h1>
+      <a class="note" href="#questions"><span class="stars">STARS</span><span>Noté 4/5 sur <u>Google</u>, 25 avis</span></a>
+      <h2 class="h1v split">Le chaud, le froid et l'eau, depuis 1943</h2>
+      <p class="sub">Chauffage <i>/</i> Climatisation <i>/</i> Ventilation <i>/</i> Plomberie</p>
+      <p class="lead fx">Entreprise familiale stéphanoise : notre bureau d'études conçoit, nos équipes installent, MATCH assure l'entretien.</p>
+      <div class="btns hb"><a class="btn" href="#contact">Demander un devis</a><a class="btn s" href="#realisations">Nos réalisations</a></div>
+    </div>
+    <div class="stairs" aria-hidden="true"><span class="chipw">CHK Chaufferies jusqu'à 2 000 kW</span><span class="chipw">CHK Climatisation et eau glacée</span><span class="chipw">CHK Ventilation double flux</span><span class="chipw">CHK Plomberie sanitaire</span></div>
+  </div>
+</section>
+
+<svg class="wv" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 60C120 34 210 80 340 68S560 22 710 38s250 48 380 36 210-52 330-44c8 1 14 2 20 4V110H0Z"/></svg>
+<section class="proofs">
+  <div class="mq" aria-label="Certifications et engagements"><ul><li>CHK Qualibat RGE</li><li>CHK Qualigaz</li><li>CHK Plomberie technicité supérieure</li><li>CHK Bureau d'études intégré</li><li>CHK Entreprise familiale depuis 1943</li><li>CHK Entretien par MATCH</li></ul><ul aria-hidden="true"><li>CHK Qualibat RGE</li><li>CHK Qualigaz</li><li>CHK Plomberie technicité supérieure</li><li>CHK Bureau d'études intégré</li><li>CHK Entreprise familiale depuis 1943</li><li>CHK Entretien par MATCH</li></ul></div>
+</section>
+
+<section class="lt sec" style="padding-top:8px;padding-bottom:20px" data-gif="chiffres">
+  <div class="c"><div class="nums numc fx">
+    <div class="nb"><b data-n="1943" data-from="1900" data-brut="1">1943</b><span>année de création à Saint-Étienne</span></div>
+    <div class="nb"><b data-n="72">72</b><span>collaborateurs avec MATCH</span></div>
+    <div class="nb"><b><i class="v" data-n="2000">2 000</i><small>kW</small></b><span>chaufferies installées jusqu'à</span></div>
+    <div class="nb"><b data-n="15">15</b><span>chefs de chantier</span></div>
+  </div></div>
+</section>
+
+<section class="lt sec" id="metiers">
+  <div class="c">
+    <div class="kick"><span class="pill">Nos métiers</span><h2 class="h2 split" style="max-width:13ch">Six métiers, <em>une seule équipe</em></h2></div>
+    <div class="mt" data-gif="metiers">
+      <a class="mtc big veil fx" href="#contact"><img src="img/chaufferie-gaz.jpg" alt="Chaufferie gaz installée par Oriol" loading="lazy"><span class="no">01</span><span class="cap"><span><b>Chauffage</b><small>Chaufferies gaz, propane, fuel et bois</small></span><i class="go">ARW_R</i></span></a>
+      <a class="mtc tall veil fx" href="#contact"><img src="img/groupe-eau-glacee.jpg" alt="Groupe d'eau glacée" loading="lazy"><span class="no">02</span><span class="cap"><b>Climatisation</b></span></a>
+      <a class="mtc veil fx" href="#contact"><img src="img/cta-toiture.jpg" alt="Centrale de traitement d'air en toiture" loading="lazy"><span class="no">03</span><span class="cap"><b>Ventilation</b></span></a>
+      <a class="mtc veil fx" href="#contact"><img src="img/sanitaires-stade.jpg" alt="Sanitaires installés par Oriol" loading="lazy"><span class="no">04</span><span class="cap"><b>Plomberie</b></span></a>
+      <a class="mtc wide veil fx" href="#contact"><img src="img/solaire.jpg" alt="Capteurs solaires thermiques" loading="lazy" style="object-position:50% 35%"><span class="no">05</span><span class="cap"><span><b>Énergies renouvelables</b><small>Solaire thermique, pompes à chaleur, bois</small></span></span></a>
+      <a class="mtc veil fx" href="#contact"><img src="img/vapeur.jpg" alt="Chaudière vapeur industrielle" loading="lazy"><span class="no">06</span><span class="cap"><b>Fluides industriels</b></span></a>
+      <a class="mtc fx" href="#contact" style="background:var(--acc);color:var(--acc-ink)"><span class="cap" style="flex-direction:column;align-items:flex-start;height:100%;justify-content:space-between"><b>Un autre projet ?</b><span class="go" style="align-self:flex-end">ARW_R</span></span></a>
+    </div>
+  </div>
+</section>
+
+<section class="lt cr sec" id="realisations">
+  <div class="c">
+    <div class="kick"><span class="pill">Nos réalisations</span><h2 class="h2 split" style="max-width:14ch">Des bâtiments que <em>toute la Loire</em> connaît</h2></div>
+    <div class="stack">
+      <article class="stk" style="--i:0" data-gif="realisations"><img src="img/stade.jpg" alt="Stade Geoffroy-Guichard" loading="lazy"><div class="top"><span class="yr2">2011 à 2015</span><span class="cnt">01 / 05</span></div><div class="in"><h3>Stade Geoffroy-Guichard</h3><p>Saint-Étienne · pompe à chaleur de 500 kW, 300 cassettes, 7 centrales d'air</p><div class="tags"><span class="a">3 500 000 € HT</span><span>Chauffage</span><span>Ventilation</span><span>Plomberie</span></div></div></article>
+      <article class="stk" style="--i:1"><img src="img/hopital-nord.jpg" alt="Groupe de condensation héliporté au-dessus de l'hôpital Nord" loading="lazy"><div class="top"><span class="yr2">Avril 2025</span><span class="cnt">02 / 05</span></div><div class="in"><h3>Hôpital Nord, CHU</h3><p>Héliportage de deux groupes de condensation pour le futur centre de données</p><div class="tags"><span>Climatisation</span><span>Milieu hospitalier</span></div></div></article>
+      <article class="stk" style="--i:2"><img src="img/compagnons-devoir.jpg" alt="Bâtiment des Compagnons du Devoir à Brignais" loading="lazy"><div class="top"><span class="yr2">2024</span><span class="cnt">03 / 05</span></div><div class="in"><h3>Les Compagnons du Devoir</h3><p>Brignais · chaufferie bois de 400 kW, panneaux radiants, double flux</p><div class="tags"><span class="a">1 550 000 € HT</span><span>Chauffage</span><span>Ventilation</span></div></div></article>
+      <article class="stk" style="--i:3"><img src="img/musee-mine.jpg" alt="Musée de la Mine, parc Couriot" loading="lazy"><div class="top"><span class="yr2">2014</span><span class="cnt">04 / 05</span></div><div class="in"><h3>Musée de la Mine</h3><p>Saint-Étienne · condensation et eau glacée pour la conservation des collections</p><div class="tags"><span class="a">530 000 € HT</span><span>Chauffage</span><span>Climatisation</span></div></div></article>
+      <article class="stk" style="--i:4"><img src="img/zenith.jpg" alt="Réseaux sous la charpente du Zénith de Saint-Étienne" loading="lazy"><div class="top"><span class="yr2">2008</span><span class="cnt">05 / 05</span></div><div class="in"><h3>Zénith de Saint-Étienne</h3><p>Plancher chauffant de 2 000 m², réseaux d'eaux pluviales et sanitaires</p><div class="tags"><span class="a">480 000 € HT</span><span>Chauffage</span><span>Plomberie</span></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="brand sec" data-gif="marque">
+  <div class="sym" aria-hidden="true">PICTO_GRAND</div>
+  <div class="c grid">
+    <div class="kick" style="margin:0">
+      <span class="pill">Bureau d'études</span>
+      <h2 class="h2 split" style="max-width:12ch">Tout est conçu ici, <em>rien n'est sous-traité</em></h2>
+      <ul class="bul fx"><li><i>TICK</i>Réseaux d'eau chaude, froide et glacée calculés en interne</li><li><i>TICK</i>Conception en 3D et prévention de la légionellose</li><li><i>TICK</i>Un seul interlocuteur, de l'étude à la mise en service</li></ul>
+      <div class="btns fx btn-last" style="margin-top:8px"><a class="btn" href="#contact">Parler de mon projet</a></div>
+    </div>
+    <div class="ph-r zoom fx"><img src="img/bureau-etudes.jpg" alt="Chargés d'affaires d'Oriol autour d'un plan" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="strip" aria-label="Photos de chantiers">
+  <div class="row" style="padding-top:72px"><div><img src="img/pac-fps.jpg" alt="" loading="lazy"><img src="img/chirurgie-maxillo.jpg" alt="" loading="lazy"><img src="img/thimonnier.jpg" alt="" loading="lazy"><img src="img/db-schenker.jpg" alt="" loading="lazy"><img src="img/salle-de-bain.jpg" alt="" loading="lazy"><img src="img/hero-levage.jpg" alt="" loading="lazy"></div><div><img src="img/pac-fps.jpg" alt="" aria-hidden="true" loading="lazy"><img src="img/chirurgie-maxillo.jpg" alt="" aria-hidden="true" loading="lazy"><img src="img/thimonnier.jpg" alt="" aria-hidden="true" loading="lazy"><img src="img/db-schenker.jpg" alt="" aria-hidden="true" loading="lazy"><img src="img/salle-de-bain.jpg" alt="" aria-hidden="true" loading="lazy"><img src="img/hero-levage.jpg" alt="" aria-hidden="true" loading="lazy"></div></div>
+</section>
+
+<section class="lt sec" id="avis" data-place="PLACE_ID" data-k="AVIS_CLE">
+  <div class="c">
+    <div class="avh"><div class="kick"><span class="pill">Avis clients</span><h2 class="h2 split" style="max-width:12ch">Ce que disent <em>nos clients</em></h2></div>
+    <a class="score fx" href="https://www.google.com/maps/place/?q=place_id:PLACE_ID" target="_blank" rel="noopener"><b>4/5</b><span><span class="stars">STARS</span><small><u>25 avis sur Google</u></small></span></a></div>
+    <ul class="avs" id="avs"></ul>
+    <p class="avsrc">Avis publiés sur Google Maps</p>
+  </div>
+</section>
+
+<section class="lt cr sec ent" id="apropos">
+  <div class="c">
+    <div class="co fx">
+      <div class="seal" aria-hidden="true"><svg class="ring" viewBox="0 0 120 120"><defs><path id="rond" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs><text font-family="Bricolage Grotesque" font-size="10.6" font-weight="600" letter-spacing="2.2" fill="currentColor"><textPath href="#rond">ENTREPRISE FAMILIALE · DEPUIS 1943 · </textPath></text></svg><span class="ctr2">PICTO_SMALL</span></div>
+      <div class="main ph-r zoom"><img src="img/dirigeants.jpg" alt="Alain Odouard, Gaëtan Roubin et Nicolas Cellier, dirigeants d'Oriol, devant un véhicule de l'entreprise" loading="lazy" style="object-position:50% 40%"></div>
+      <div class="tagn"><span class="nm">Alain, Gaëtan et Nicolas</span><span class="chipw">CHK Dirigeants depuis 2012</span></div>
+      <div class="sec2"><img src="img/nacelle.jpg" alt="Technicien d'Oriol en nacelle sur un chantier" loading="lazy"></div>
+    </div>
+    <div class="tx">
+      <span class="pill">L'entreprise</span>
+      <h2 class="h2 split" style="max-width:12ch">Trois générations <em>au service du confort</em></h2>
+      <p>Une entreprise familiale stéphanoise, aujourd'hui dirigée par <strong>trois anciens chargés d'affaires de la maison</strong>, avec 72 collaborateurs entre Oriol et MATCH, rue de la Tour.</p>
+      <ol class="dates fx"><li><b>1943</b><span>Joseph Oriol fonde l'entreprise à Saint-Étienne</span></li><li><b>1980</b><span>Ses fils Jacques et Alain prennent la suite</span></li><li><b>1989</b><span>Création de MATCH pour le dépannage et la maintenance</span></li><li><b>2012</b><span>Trois chargés d'affaires reprennent la direction</span></li></ol>
+    </div>
+  </div>
+</section>
+
+<section class="lt sec" id="methode">
+  <div class="c">
+    <div class="kick ctr"><span class="pill">Méthode</span><h2 class="h2 split" style="max-width:12ch">Votre projet, <em>étape par étape</em></h2></div>
+    <ol class="steps2">
+      <li class="stp fx"><div class="ph"><img src="img/facade-oriol.jpg" alt="Les locaux d'Oriol, rue de la Tour à Saint-Étienne" loading="lazy"><span class="n">1</span></div><div class="tx"><h3>Échange sur votre besoin</h3><p>Un chargé d'affaires analyse votre projet et reste votre interlocuteur jusqu'à la fin.</p></div></li>
+      <li class="stp fx"><div class="ph"><img src="img/bureau-conception.jpg" alt="Le bureau d'études d'Oriol" loading="lazy"><span class="n">2</span></div><div class="tx"><h3>Conception au bureau d'études</h3><p>Plans, calculs et dimensionnement, conformes à la réglementation thermique.</p></div></li>
+      <li class="stp fx"><div class="ph"><img src="img/grutage.jpg" alt="Grutage d'un équipement sur un chantier d'Oriol" loading="lazy"><span class="n">3</span></div><div class="tx"><h3>Réalisation par nos équipes</h3><p>Monteurs chauffagistes, plombiers, gaineurs et frigoristes posent l'installation.</p></div></li>
+      <li class="stp fx"><div class="ph"><img src="img/armoire-oriol.jpg" alt="Armoire de commande d'une installation Oriol" loading="lazy"><span class="n">4</span></div><div class="tx"><h3>Mise en service et entretien</h3><p>Réglages, mise en route, puis suivi par MATCH avec un contrat d'entretien.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="lt cr sec" id="zone">
+  <div class="c zg">
+    <div class="kick"><span class="pill">Zone d'intervention</span><h2 class="h2 split" style="max-width:13ch">À Saint-Étienne, dans la Loire <em>et autour de Lyon</em></h2><p class="lead">Des écoles et hôpitaux de la Loire aux bâtiments industriels de la région lyonnaise.</p></div>
+    <div class="mapc fx" id="carte"><div class="mapv">CARTE_SVG<span class="lab">Saint-Étienne</span><span class="leg">Siège rue de la Tour</span></div><div class="vrows" aria-label="Villes d'intervention">CITYROWS</div></div>
+  </div>
+</section>
+
+<section class="lt cr sec" id="questions">
+  <div class="c fq">
+    <div class="kick"><span class="pill">Questions fréquentes</span><h2 class="h2 split" style="max-width:11ch">On répond à <em>vos questions</em></h2></div>
+    <div class="acc" id="acc">
+      <div class="q on"><button aria-expanded="true">Intervenez-vous chez les particuliers ?CHEV</button><div class="a"><div><p>Oui. Six compagnons sont dédiés aux particuliers : un pôle installation pour les chaudières, planchers chauffants, pompes à chaleur et la climatisation, et un pôle dépannage pour la robinetterie, les chauffe-eau et la recherche de fuites.</p></div></div></div>
+      <div class="q"><button aria-expanded="false">Qui assure l'entretien après les travaux ?CHEV</button><div class="a"><div><p>MATCH, créée par la famille Oriol en 1989 et reprise entièrement en 2019, assure l'entretien et la maintenance des installations avec des contrats d'entretien.</p></div></div></div>
+      <div class="q"><button aria-expanded="false">Quelles puissances de chaufferie installez-vous ?CHEV</button><div class="a"><div><p>Des chaufferies gaz naturel, propane ou fuel de 20 à 2 000 kW, et des chaufferies bois de 30 à 800 kW, avec conduits de fumée, ventouses et tubages.</p></div></div></div>
+      <div class="q"><button aria-expanded="false">Êtes-vous certifiés RGE ?CHEV</button><div class="a"><div><p>Oui. Oriol est certifié Qualibat RGE (n° E-E52581), Qualibat EFF 4 / CA 8, qualifié en plomberie sanitaire technicité supérieure (5113) et Qualigaz.</p></div></div></div>
+      <div class="q"><button aria-expanded="false">Travaillez-vous en milieu hospitalier ?CHEV</button><div class="a"><div><p>Oui : centre de chirurgie maxillo-faciale à Saint-Étienne, extension de l'Hôpital privé Est Lyonnais, héliportage au CHU de Saint-Étienne. Le bureau d'études maîtrise la prévention de la légionellose et des infections.</p></div></div></div>
+      <div class="q"><button aria-expanded="false">Où se trouvent vos locaux ?CHEV</button><div class="a"><div><p>Au 79 rue de la Tour à Saint-Étienne : 460 m² de bureaux, 330 m² d'ateliers et plus de 2 300 m² de stockage. Ouvert du lundi au vendredi, de 8 h à 17 h.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="fin">
+  <img src="img/nacelle-vehicule.jpg" alt="" loading="lazy">
+  <div class="c">
+    <span class="pill">Contactez Oriol à Saint-Étienne</span>
+    <h2 class="h2 split" style="max-width:15ch">Décrivez votre projet, <em>recevez un chiffrage sur mesure</em></h2>
+    <div class="btns fx btn-last"><a class="btn" href="#contact">Décrire mon projet</a><a class="btn s" href="tel:+33477747718">Appeler Oriol</a></div>
+    <ul class="reas fx"><li>CHK Bureau d'études intégré</li><li>CHK Certifié Qualibat RGE</li><li>CHK Entretien par MATCH</li></ul>
+  </div>
+</section>
+
+<section class="lt sec" id="contact">
+  <div class="c">
+    <div class="kick ctr"><span class="pill">Contact</span><h2 class="h2 split" style="max-width:12ch">Parlons de <em>votre installation</em></h2></div>
+    <div class="ctg">
+      <div class="fx">
+        <a class="blk tel" href="tel:+33477747718"><i>PHONE</i><span><span>Appelez-nous</span><b>04 77 74 77 18</b></span></a>
+        <a class="blk" href="https://www.google.com/maps/search/?api=1&query=Oriol+79+rue+de+la+Tour+42000+Saint-%C3%89tienne" target="_blank" rel="noopener"><i>PIN</i><span><span>Adresse</span><b>79 rue de la Tour<br>42000 Saint-Étienne</b></span><span class="go2">ARW_R</span></a>
+        <div class="blk"><i>CLOCK</i><span><span>Horaires</span><b>Du lundi au vendredi<br>de 8 h à 17 h</b></span></div>
+      </div>
+      <form class="fx" onsubmit="event.preventDefault();this.querySelector('.ok').style.display='block'">
+        <input aria-label="Nom" placeholder="Nom et prénom"><input aria-label="Téléphone" placeholder="Téléphone" inputmode="tel">
+        <select aria-label="Votre besoin"><option>Chauffage</option><option>Climatisation</option><option>Ventilation</option><option>Plomberie</option><option>Énergies renouvelables</option><option>Dépannage</option><option>Contrat d'entretien</option></select>
+        <textarea aria-label="Votre projet" placeholder="Votre projet en quelques mots"></textarea>
+        <button class="btn" type="submit">Envoyer ma demande</button>
+        <p class="ok">Le formulaire sera actif sur le site final.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="c"><div class="fcard">
+  <div><span class="logo">LOGO_CLIENT</span><p style="margin-top:20px;font-size:14.5px;color:rgba(255,255,255,.7)">Chauffage, climatisation, ventilation et plomberie à Saint-Étienne depuis 1943.</p><a class="btn s" href="tel:+33477747718" style="margin-top:20px">04 77 74 77 18</a></div>
+  <div><h4>Navigation</h4><ul><li><a href="#metiers">Métiers</a></li><li><a href="#apropos">L'entreprise</a></li><li><a href="#realisations">Réalisations</a></li><li><a href="#methode">Méthode</a></li><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact</a></li></ul></div>
+  <div><h4>Métiers</h4><ul><li>Chauffage</li><li>Climatisation</li><li>Ventilation</li><li>Plomberie sanitaire</li><li>Énergies renouvelables</li><li>Fluides industriels</li></ul></div>
+  <div><h4>Contact</h4><ul><li>79 rue de la Tour</li><li>42000 Saint-Étienne</li><li>Lundi au vendredi, 8 h à 17 h</li></ul></div>
+  <p class="legal"><b>Démo Widesign</b> : un aperçu de ce que pourrait être le site d'Oriol, visible jusqu'au 30 novembre 2026. Démo non cédée, reproduction interdite. <a href="https://widesign.fr" style="color:var(--acc)">widesign.fr</a></p>
+</div></div></footer>
+
+<div class="callbar" id="callbar"><a class="btn s" href="tel:+33477747718">PHONE Appeler</a><a class="btn" href="#contact">Demander un devis</a></div>
+
+<script>
+(function(){
+  if(new Date()>new Date("2026-11-30T23:59:59")){document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;font:500 20px sans-serif;color:#fff;background:#1E1F1D">Cette démo a expiré.</div>';return}
+  var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+  // titres mot par mot
+  $$(".split").forEach(function(h){var ws=[];[].forEach.call(h.childNodes,function(n){var em=n.nodeName==="EM";(n.textContent||"").trim().split(/\s+/).forEach(function(w){if(w)ws.push([w,em])})});
+    h.innerHTML=ws.map(function(x,i){var t='<span class="w"><span class="wi" style="transition-delay:'+(i*50)+'ms">'+x[0]+'</span></span>';return x[1]?'<em>'+t+'</em>':t}).join(" ")});
+  // orchestration : éléments décalés de 160 ms, boutons en dernier
+  var first=true;
+  var io=new IntersectionObserver(function(es){var k=0,base=first?350:0;first=false;
+    es.filter(function(e){return e.isIntersecting}).forEach(function(e){var el=e.target,d=base+k*160;if(el.classList.contains("btn-last"))d+=600;el.style.transitionDelay=d+"ms";if(el.classList.contains("split"))$$(".wi",el).forEach(function(w,i){w.style.transitionDelay=(d+i*50)+"ms"});el.classList.add("on");k++;io.unobserve(el)})},{rootMargin:"0px 0px -8% 0px",threshold:.05});
+  $$(".split,.fx,.zoom").forEach(function(el){io.observe(el)});window.__io=io;
+  var cio=new IntersectionObserver(function(es){if(es[0].isIntersecting){es[0].target.classList.add("on");cio.disconnect()}},{threshold:.35});var ca=$("#carte");if(ca)cio.observe(ca);
+  // en-tête qui se cache en descendant, revient en remontant
+  var hdr=$("#hdr"),cb=$("#callbar"),hero=$(".hero"),ly=scrollY,t=null;
+  addEventListener("scroll",function(){var y=scrollY;
+    if(y<10||y<ly){clearTimeout(t);t=null;hdr.classList.remove("cache")}else if(!t&&!hdr.classList.contains("cache")){t=setTimeout(function(){hdr.classList.add("cache");t=null},700)}
+    ly=y;cb.classList.toggle("on",hero.getBoundingClientRect().bottom<0)},{passive:true});
+  // méthode : les cartes s'empilent, celle du dessous recule
+  var sts=$$(".stk");
+  function pile(){sts.forEach(function(c,k){var n=sts[k+1];if(!n){c.style.transform="";c.style.filter="";return}
+    var a=c.getBoundingClientRect(),b=n.getBoundingClientRect();var p=Math.max(0,Math.min(1,(a.bottom-b.top)/a.height));
+    c.style.transform="scale("+(1-p*.07)+")";c.style.filter="brightness("+(1-p*.45)+")"})}
+  addEventListener("scroll",pile,{passive:true});pile();
+  // menu
+  $("#ouvrir").onclick=function(){$("#off").classList.add("on");document.body.style.overflow="hidden"};
+  function fm(){$("#off").classList.remove("on");document.body.style.overflow=""}
+  $("#fermer").onclick=fm;$$("#off a").forEach(function(a){a.addEventListener("click",fm)});
+  // boutons : fond animé qui part du point d'entrée du curseur et repart par le point de sortie
+  $$(".btn").forEach(function(b){var f=document.createElement("span");f.className="bf";f.setAttribute("aria-hidden","true");f.innerHTML="<i></i><i></i>";b.insertBefore(f,b.firstChild);
+    function pos(e){var r=b.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+      b.style.setProperty("--ox",x+"px");b.style.setProperty("--oy",y+"px");
+      b.style.setProperty("--d",2*Math.hypot(Math.max(x,r.width-x),Math.max(y,r.height-y))+4+"px")}
+    b.addEventListener("pointerenter",function(e){if(e.pointerType!=="mouse")return;pos(e);requestAnimationFrame(function(){b.classList.add("on")})});
+    b.addEventListener("pointerleave",function(e){if(e.pointerType!=="mouse")return;pos(e);b.classList.remove("on")});
+    b.addEventListener("pointerdown",function(e){if(e.pointerType==="mouse")return;pos(e);b.classList.add("on");setTimeout(function(){b.classList.remove("on")},650)})});
+  // carrousels
+  $$(".arrows").forEach(function(a){var r=document.getElementById(a.dataset.for);
+    function up(){var b=a.querySelectorAll("button");b[0].disabled=r.scrollLeft<5;b[1].disabled=r.scrollLeft+r.clientWidth>r.scrollWidth-5}
+    $$("button",a).forEach(function(b){b.onclick=function(){if(r.stopAuto)r.stopAuto();var c=r.firstElementChild;r.scrollBy({left:+b.dataset.d*(c.getBoundingClientRect().width+parseFloat(getComputedStyle(r).gap||16)),behavior:"smooth"})}});
+    r.addEventListener("scroll",up,{passive:true});up()});
+  // glisser à la souris
+  $$(".rail,.slides").forEach(function(r){var down=false,sx,sl;r.addEventListener("mousedown",function(e){down=true;sx=e.pageX;sl=r.scrollLeft;r.style.scrollSnapType="none"});addEventListener("mouseup",function(){if(down){down=false;r.style.scrollSnapType=""}});r.addEventListener("mousemove",function(e){if(down){e.preventDefault();r.scrollLeft=sl-(e.pageX-sx)*1.5}})});
+  // défilement automatique des carrousels quand ils sont à l'écran, en pause dès que la personne y touche
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)$$(".rail,.slides").forEach(function(r){var vu=false,pause=0;
+    function pas(){var c=r.firstElementChild,w=c.getBoundingClientRect().width+parseFloat(getComputedStyle(r).columnGap||16);
+      if(r.scrollLeft+r.clientWidth>=r.scrollWidth-5)r.scrollTo({left:0,behavior:"smooth"});else r.scrollBy({left:w,behavior:"smooth"})}
+    r.stopAuto=function(){pause=Date.now()+8000};
+    ["pointerdown","touchstart","wheel"].forEach(function(ev){r.addEventListener(ev,r.stopAuto,{passive:true})});
+    r.addEventListener("mouseenter",function(){pause=Infinity});r.addEventListener("mouseleave",function(){pause=Date.now()+1500});
+    new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!vu)pause=Math.max(pause,Date.now()+1800);vu=v},{threshold:.45}).observe(r);
+    setInterval(function(){if(vu&&!document.hidden&&Date.now()>pause)pas()},3600)});
+  // compteurs des chiffres clés
+  var nio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;nio.unobserve(e.target);var el=e.target,to=+el.dataset.n,t0=null,fmt=function(v){return el.dataset.brut?String(v):String(v).replace(/\B(?=(\d{3})+(?!\d))/g," ")};
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=fmt(to);return}
+    var from=+(el.dataset.from||0);
+    function f(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/1600),e=1-Math.pow(1-p,3);el.textContent=fmt(Math.round(from+(to-from)*e));if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})},{threshold:.4});
+  $$("[data-n]").forEach(function(el){nio.observe(el)});
+  // accordéon
+  $$("#acc .q").forEach(function(q){$("button",q).onclick=function(){var o=q.classList.contains("on");$$("#acc .q").forEach(function(x){x.classList.remove("on");$("button",x).setAttribute("aria-expanded","false")});if(!o){q.classList.add("on");this.setAttribute("aria-expanded","true")}}});
+})();
+
+/* avis Google en direct (Places, clé limitée au domaine des démos) */
+(function(){var sec=document.getElementById("avis");if(!sec)return;var k=sec.getAttribute("data-k"),id=sec.getAttribute("data-place"),ul=document.getElementById("avs");
+ if(!/^AIza/.test(k||"")){if(!ul.children.length)sec.remove();return}
+ sec.style.display="none";
+ var st=function(n){var o="";for(var i=0;i<5;i++)o+=i<n?ETOILE_P_JS:ETOILE_V_JS;return o};
+ var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+ window.__avisGo=function(){google.maps.importLibrary("places").then(function(lib){var p=new lib.Place({id:id,requestedLanguage:"fr"});return p.fetchFields({fields:["reviews"]}).then(function(){
+  var rv=(p.reviews||[]).filter(function(r){return r.rating>=4&&r.text&&r.text.length>=40}).slice(0,4);
+  if(rv.length<2){sec.remove();return}
+  ul.innerHTML=rv.map(function(r,i){var a=r.authorAttribution||{},n=a.displayName||"Client Google",nm=a.uri?'<a href="'+esc(a.uri)+'" target="_blank" rel="noopener">'+esc(n)+'</a>':esc(n);
+   return '<li class="av fx'+(i?"":" one")+'"><span class="stars" aria-label="'+r.rating+' étoiles sur 5">'+st(Math.round(r.rating))+'</span><q>'+esc(r.text)+'</q><div class="who"><span class="ini">'+esc(n.charAt(0).toUpperCase())+'</span><div><b>'+nm+'</b><span>Avis Google'+(r.relativePublishTimeDescription?" · "+esc(r.relativePublishTimeDescription):"")+'</span></div></div></li>'}).join("");
+  sec.style.display="";ul.querySelectorAll(".fx").forEach(function(el){window.__io?window.__io.observe(el):el.classList.add("on")});
+ })}).catch(function(){sec.remove()})};
+ var sc=document.createElement("script");sc.async=true;sc.onerror=function(){sec.remove()};
+ sc.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(k)+"&v=weekly&loading=async&language=fr&libraries=places&callback=__avisGo";document.head.appendChild(sc);
+})();
+</script>
+</body>
+</html>
