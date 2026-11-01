@@ -62,7 +62,7 @@ def capturer(pw, url, dossier, ratios=None):
       document.querySelectorAll('.rv').forEach(e=>e.classList.add('on'))}""")
     p.wait_for_timeout(800)
     h = p.evaluate('document.documentElement.scrollHeight')
-    for y in range(0, min(h, 4200), 400):
+    for y in range(0, min(h, 16000), 450):
         p.evaluate(f'scrollTo(0,{y})'); p.wait_for_timeout(120)
     p.evaluate('scrollTo(0,0)'); p.wait_for_timeout(700)
     moments = None
