@@ -1,5 +1,5 @@
 """GIF avant/après pour le mail de prospection : deux téléphones côte à côte,
-le site actuel du prospect à gauche, la maquette Widesign à droite, qui défilent ensemble.
+le site actuel du prospect à gauche, la démo Widesign à droite, qui défilent ensemble au rythme de lecture\n(arrêt de 1,8 s sur chaque écran, défilement d'environ 1 s).
 Usage : python3 gif_avant_apres.py <url_site_actuel> <chemin_ou_url_demo> <sortie.gif> "<légende ou vide>" [couleur_accent]
 Le premier plan du GIF montre les deux pages d'accueil (c'est ce que voit Outlook ordinateur).
 Vise moins de 900 Ko (256 couleurs : en dessous, les photos du site actuel se dégradent et le comparatif devient injuste) ; utilise ffmpeg et gifsicle s'ils sont présents."""
@@ -15,23 +15,27 @@ if not demo.startswith(('http://', 'https://', 'file://')):
     demo = 'file://' + os.path.abspath(demo)
 
 W, H = 540, 540
-PH_W, PH_H = 214, 440          # écran affiché dans chaque téléphone
-VIEW_W, VIEW_H = 390, 802      # fenêtre mobile capturée (même rapport que l'écran)
-ARRETS = [0, 780, 1560, 2340]  # positions de défilement
+S = 2                          # tout est dessiné en double taille puis réduit : bords nets, ombres propres
+PH_W, PH_H = 214, 440          # écran affiché dans chaque téléphone (taille finale)
+VIEW_W, VIEW_H = 390, 747      # fenêtre mobile capturée (même rapport que l'écran sous la barre d'état)
+ARRETS = [0, 760, 1520]        # positions de défilement (3 écrans : le poids reste sous 900 Ko)
+PAUSE, PAUSE_1 = 180, 240      # durée de chaque arrêt, en centièmes de seconde (le premier plan reste plus longtemps)
+PAS, PAS_D = 8, 12             # défilement : 8 images de 12 centièmes, soit environ 1 s par écran
 TMP = tempfile.mkdtemp(prefix='gifaa-')
 
 def ease(t):
     return 4 * t * t * t if t < .5 else 1 - (-2 * t + 2) ** 3 / 2
 
 def positions(arrets, h):
+    """Liste de (position de défilement, durée d'affichage en centièmes)."""
     arrets = [min(a, max(0, h - VIEW_H)) for a in arrets]
     out = []
     for i, a in enumerate(arrets):
-        out += [a] * 4
+        out.append((a, PAUSE_1 if i == 0 else PAUSE))
         if i < len(arrets) - 1:
             b = arrets[i + 1]
-            out += [round(a + (b - a) * ease(k / 6)) for k in range(1, 7)]
-    return out + [arrets[-1]] * 4
+            out += [(round(a + (b - a) * ease(k / PAS)), PAS_D) for k in range(1, PAS)]
+    return out
 
 UA = ('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 '
       '(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1')
@@ -58,12 +62,12 @@ def capturer(pw, url, dossier):
         p.evaluate(f'scrollTo(0,{y})'); p.wait_for_timeout(120)
     p.evaluate('scrollTo(0,0)'); p.wait_for_timeout(700)
     pos = positions(ARRETS, h)
-    for i, y in enumerate(pos):
+    for i, (y, _) in enumerate(pos):
         p.evaluate(f"window.scrollTo({{top:{y},behavior:'instant'}})")
         p.wait_for_timeout(50)
         p.screenshot(path=f'{dossier}/{i:03d}.png')
     b.close()
-    return len(pos)
+    return pos
 
 def police(taille, gras=False):
     for f in (['/usr/share/fonts/opentype/inter/Inter-SemiBold.otf', '/usr/share/fonts/opentype/inter/Inter-Bold.otf'] if gras else
@@ -77,63 +81,93 @@ def hexrgb(h):
     h = h.lstrip('#'); return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 def fond():
-    im = Image.new('RGB', (W, H), (242, 239, 234))
+    im = Image.new('RGB', (W * S, H * S), (243, 240, 235))
     d = ImageDraw.Draw(im)
-    f = police(15, True)
-    for cx, txt, col in ((W * 0.27, "Votre site aujourd'hui", (170, 160, 150)), (W * 0.73, 'Démo Widesign', hexrgb(accent))):
-        tw = d.textlength(txt, font=f)
+    f = police(15 * S, True)
+    for cx, txt, col in ((W * 0.27, "Votre site aujourd'hui", (160, 150, 140)), (W * 0.73, 'Démo Widesign', hexrgb(accent))):
+        tw = d.textlength(txt, font=f) / S
         x = cx - (tw + 16) / 2
-        d.ellipse((x, 22, x + 9, 31), fill=col)
-        d.text((x + 16, 18), txt, fill=(28, 24, 20), font=f)
+        d.ellipse((x * S, 22 * S, (x + 9) * S, 31 * S), fill=col)
+        d.text(((x + 16) * S, 18 * S), txt, fill=(28, 24, 20), font=f)
     if legende.strip():
-        f2 = police(12)
+        f2 = police(12 * S)
         tw = d.textlength(legende, font=f2)
-        d.text(((W - tw) / 2, H - 22), legende, fill=(120, 112, 104), font=f2)
+        d.text(((W * S - tw) / 2, (H - 22) * S), legende, fill=(120, 112, 104), font=f2)
     return im
 
-def telephone(capture, sombre=True):
-    ecran = capture.resize((PH_W, PH_H), Image.LANCZOS)
-    cadre = Image.new('RGBA', (PH_W + 14, PH_H + 14), (0, 0, 0, 0))
-    d = ImageDraw.Draw(cadre)
-    d.rounded_rectangle((0, 0, PH_W + 13, PH_H + 13), 30, fill=(18, 16, 14) if sombre else (30, 28, 26))
-    masque = Image.new('L', (PH_W, PH_H), 0)
-    ImageDraw.Draw(masque).rounded_rectangle((0, 0, PH_W - 1, PH_H - 1), 24, fill=255)
-    cadre.paste(ecran, (7, 7), masque)
-    return cadre
+B = 6                           # épaisseur du bord du téléphone
+BARRE = 30                      # hauteur de la barre d'état
+FW, FH = PH_W + 2 * B, PH_H + 2 * B
+R_EXT, R_INT = 34, 28
 
-def composer(n_a, n_b):
+def rr(taille, rayon, fill, mode='L'):
+    m = Image.new(mode, taille, 0)
+    ImageDraw.Draw(m).rounded_rectangle((0, 0, taille[0] - 1, taille[1] - 1), rayon, fill=fill)
+    return m
+
+def cadre_telephone():
+    """Téléphone vide en double taille : liseré métal, bord noir, îlot en haut."""
+    c = Image.new('RGBA', (FW * S, FH * S), (0, 0, 0, 0))
+    c.paste((70, 70, 74), (0, 0), rr((FW * S, FH * S), R_EXT * S, 255))
+    e = int(1.2 * S)
+    c.paste((12, 12, 14), (e, e), rr((FW * S - 2 * e, FH * S - 2 * e), R_EXT * S - e, 255))
+    return c
+
+def ombre():
+    """Ombre en deux couches (diffuse + contact), sur une toile assez grande pour que le flou ne soit jamais coupé."""
+    M = 60 * S
+    t = (FW * S + 2 * M, FH * S + 2 * M)
+    o = Image.new('L', t, 0)
+    l1 = Image.new('L', t, 0)
+    ImageDraw.Draw(l1).rounded_rectangle((M + 10 * S, M + 22 * S, M + (FW - 10) * S, M + (FH + 8) * S), R_EXT * S, fill=60)
+    l1 = l1.filter(ImageFilter.GaussianBlur(20 * S))
+    l2 = Image.new('L', t, 0)
+    ImageDraw.Draw(l2).rounded_rectangle((M + 4 * S, M + 6 * S, M + (FW - 4) * S, M + (FH + 2) * S), R_EXT * S, fill=70)
+    l2 = l2.filter(ImageFilter.GaussianBlur(5 * S))
+    o = Image.fromarray(__import__('numpy').maximum(__import__('numpy').array(l1), __import__('numpy').array(l2)))
+    return o, M
+
+def composer(pos_a, pos_b):
     base = fond()
-    # ombre douce sur une toile agrandie : sans marge, le flou est coupé net en rectangle sous le téléphone
-    M = 30
-    ombre = Image.new('L', (PH_W + 14 + 2 * M, PH_H + 14 + 2 * M), 0)
-    ImageDraw.Draw(ombre).rounded_rectangle((M + 6, M, M + PH_W + 7, M + PH_H + 13), 30, fill=70)
-    ombre = ombre.filter(ImageFilter.GaussianBlur(9))
-    n = min(n_a, n_b)
-    y0 = 50 if legende.strip() else 54
-    xs = (int(W * 0.27 - (PH_W + 14) / 2), int(W * 0.73 - (PH_W + 14) / 2))
+    om, M = ombre()
+    cadre = cadre_telephone()
+    masque = rr((PH_W * S, PH_H * S), R_INT * S, 255)
+    y0 = 52
+    xs = (int(W * 0.27 - FW / 2), int(W * 0.73 - FW / 2))
+    for k in range(2):
+        base.paste((38, 30, 24), (xs[k] * S - M, y0 * S - M), om)
+        base.paste(cadre, (xs[k] * S, y0 * S), cadre)
+    n = min(len(pos_a), len(pos_b))
     for i in range(n):
         im = base.copy()
         for k, dos in enumerate(('a', 'b')):
-            cap = Image.open(f'{TMP}/{dos}/{i:03d}.png').convert('RGB')
-            im.paste((40, 34, 28), (xs[k] - M, y0 - M + 7), ombre)
-            t = telephone(cap)
-            im.paste(t, (xs[k], y0), t)
-        im.save(f'{TMP}/c{i:03d}.png')
-    return n
+            cap = Image.open(f'{TMP}/{dos}/{i:03d}.png').convert('RGB').resize((PH_W * S, (PH_H - BARRE) * S), Image.LANCZOS)
+            # barre d'état façon iPhone (couleur du haut de la page, îlot noir) : le site commence en dessous, rien n'est caché
+            haut = cap.crop((0, 0, cap.width, 3 * S)).resize((1, 1), Image.BOX).getpixel((0, 0))
+            ecran = Image.new('RGB', (PH_W * S, PH_H * S), haut)
+            ecran.paste(cap, (0, BARRE * S))
+            de = ImageDraw.Draw(ecran)
+            de.rounded_rectangle(((PH_W / 2 - 30) * S, 7 * S, (PH_W / 2 + 30) * S, 24 * S), 8.5 * S, fill=(8, 8, 10))
+            clair = sum(haut) / 3 < 140
+            fh = police(9 * S, True)
+            de.text((20 * S, 10 * S), '9:41', fill=(255, 255, 255) if clair else (20, 20, 22), font=fh)
+            im.paste(ecran, ((xs[k] + B) * S, (y0 + B) * S), masque)
+        im.resize((W, H), Image.LANCZOS).save(f'{TMP}/c{i:03d}.png')
+    return [d for _, d in pos_a[:n]]
 
-def encoder(n):
+def encoder(durees):
     brut = f'{TMP}/brut.gif'
-    if shutil.which('ffmpeg'):
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '9', '-i', f'{TMP}/c%03d.png',
-                        '-vf', 'split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle',
-                        '-loop', '0', brut], check=True)
-    else:
-        imgs = [Image.open(f'{TMP}/c{i:03d}.png').convert('P', palette=Image.ADAPTIVE, colors=256) for i in range(n)]
-        imgs[0].save(brut, save_all=True, append_images=imgs[1:], duration=111, loop=0, optimize=True)
+    with open(f'{TMP}/liste.txt', 'w') as f:
+        for i, d in enumerate(durees):
+            f.write(f"file 'c{i:03d}.png'\nduration {d / 100:.2f}\n")
+        f.write(f"file 'c{len(durees) - 1:03d}.png'\n")
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', f'{TMP}/liste.txt',
+                    '-vf', 'split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
+                    '-fps_mode', 'vfr', '-loop', '0', brut], check=True)
     gs = shutil.which('gifsicle') or next(iter(glob.glob('/tmp/gs/node_modules/gifsicle/vendor/gifsicle')), None)
     if gs:
-        for lossy, cols in ((30, 256), (60, 256), (90, 220), (120, 180)):
-            subprocess.run([gs, '-O3', f'--lossy={lossy}', '--colors', str(cols), brut, '-o', sortie], check=True)
+        for lossy, cols in ((0, 256), (20, 256), (40, 256), (60, 224), (80, 200), (100, 176)):
+            subprocess.run([gs, '-O3', '--colors', str(cols)] + ([f'--lossy={lossy}'] if lossy else []) + [brut, '-o', sortie], check=True)
             if os.path.getsize(sortie) < 900_000:
                 break
     else:
@@ -141,10 +175,11 @@ def encoder(n):
     return os.path.getsize(sortie)
 
 with sync_playwright() as pw:
-    na = capturer(pw, site, f'{TMP}/a')
-    nb = capturer(pw, demo, f'{TMP}/b')
-n = composer(na, nb)
-taille = encoder(n)
+    pa = capturer(pw, site, f'{TMP}/a')
+    pb = capturer(pw, demo, f'{TMP}/b')
+durees = composer(pa, pb)
+taille = encoder(durees)
+n = len(durees)
 Image.open(f'{TMP}/c000.png').convert('RGB').save(os.path.splitext(sortie)[0] + '-premiere.jpg', quality=82)
 print(sortie, n, 'images', taille, 'octets')
 shutil.rmtree(TMP, ignore_errors=True)
