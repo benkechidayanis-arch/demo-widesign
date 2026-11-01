@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<!-- sources : oriol.fr (accueil, histoire, expertise, moyens et certifications, bureau d'études, solutions, réalisations : stade Geoffroy-Guichard, Zénith, Musée de la Mine, Compagnons du Devoir, Technologie Services, Hôpital privé Est Lyonnais, Immeuble Thimonnier, actualité héliportage CHU), fiche Google (note, horaires) -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1D1E1C">
+<title>Oriol, chauffage, climatisation et plomberie à Saint-Étienne depuis 1943</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* famille de marque tirée du logo (anthracite #323230) */
+  --b950:#181917; --b900:#1E1F1D; --b920:#1B1C1A; --b880:#161715; --b860:#222321; --b840:#272826; --b820:#2E2F2C; --b800:#2B2C29; --b600:#41433E;
+  --line:#353633; --line2:#3B3C39; --soft:rgba(217,217,217,.18);
+  /* accent unique : couleur dominante du site du prospect (couleur_site.py) */
+  --acc:#E1001A; --acc-ring:rgba(120,0,14,.45); --acc-ink:#FFFFFF; --acc-txt:#FF4255; --accd:#A40013;
+  --sage:#DEDBD6; --sage-ring:rgba(99,95,90,.42);
+  /* neutre clair pour alterner */
+  --cream:#F2F1EC; --cream2:#EAE9E2; --cream-pill:#E1E0D8; --faq:#E9E8E1; --faq-on:#FBFAF6;
+  /* couleurs secondaires du logo, en touches */
+  --rouge:#E1001A; --bleu:#009DDF; --vert:#009640;
+  --grad-card:linear-gradient(180deg,#232422 0%,#3A3C37 100%);
+  --grad-panel:linear-gradient(180deg,#141513 0%,#3F4339 100%);
+  --font:"Bricolage Grotesque",system-ui,sans-serif;
+  --container:1270px; --g:18px;
+  --r-card:15px; --r-bar:10px; --r-btn:5px;
+  --e1:cubic-bezier(.22,1,.36,1); --e2:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
+body{font-family:var(--font);font-size:15.5px;line-height:1.55;color:#fff;background:var(--b950);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body:before{content:"";position:fixed;inset:0;background:var(--b950);z-index:200;pointer-events:none;animation:pagein .7s .05s ease-out forwards}
+@keyframes pagein{to{opacity:0;visibility:hidden}}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.c{max-width:var(--container);margin:0 auto;padding:0 var(--g)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+strong{font-weight:600}
+
+/* typographie */
+.h1v{font-weight:500;font-size:44px;line-height:.8;letter-spacing:-.01em}
+.h2{font-weight:500;font-size:36px;line-height:.88;text-wrap:balance}
+.h3{font-weight:500;font-size:23px;line-height:1.08}
+.lead{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.78)}
+.on-cream{color:var(--b900)}
+.on-cream .lead{color:#4A4B46}
+
+/* pilules */
+.pill{display:inline-block;align-self:flex-start;font-weight:500;font-size:13px;line-height:22px;padding:6px 15px;border-radius:100px;background:rgba(255,255,255,.12);color:#fff}
+.on-cream .pill{background:var(--cream-pill);color:var(--b900)}
+.ctr{text-align:center;display:flex;flex-direction:column;align-items:center}
+.ctr .pill{align-self:center}
+.head{display:flex;flex-direction:column;gap:16px}
+
+/* boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:15px;line-height:26px;padding:12px 20px;border-radius:var(--r-btn);border:4px solid var(--acc-ring);background:var(--acc);color:var(--acc-ink);white-space:nowrap;transition:filter .2s,transform .2s}
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:color .3s var(--e1),scale .2s var(--e1)}
+/* fond animé au survol : deux disques qui naissent à l'endroit où le curseur entre et repartent par où il sort */
+.bf{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.bf i{position:absolute;left:var(--ox,50%);top:var(--oy,50%);width:var(--d,300px);height:var(--d,300px);margin:calc(var(--d,300px)/-2) 0 0 calc(var(--d,300px)/-2);border-radius:50%;scale:0;transition:scale .6s cubic-bezier(.32,.72,0,1)}
+.bf i:nth-child(1){background:var(--accd)}
+.bf i:nth-child(2){background:var(--b900);transition-delay:.06s}
+.btn.on .bf i{scale:1}
+.btn.on .bf i:nth-child(1){transition-delay:0s}
+.btn.on .bf i:nth-child(2){transition-delay:.08s}
+.btn.s .bf i:nth-child(1){background:#fff}
+.btn.s{transition:color .2s ease .22s,scale .2s var(--e1)}
+.btn.s.on{color:#fff;transition:color .2s ease .1s,scale .2s var(--e1)}
+.btn:active{scale:.97}
+.btn.s{background:var(--sage);border-color:var(--sage-ring);color:var(--b900)}
+.btn svg{width:17px;height:17px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+
+/* apparitions (fidèles au gabarit de référence : mots, puis éléments, puis boutons) */
+.w{display:inline-block;clip-path:inset(-.6em -.4em -.3em -.4em);vertical-align:top}
+.wi{display:inline-block;transform:translateY(200%);transition:transform .9s var(--e1)}
+.split.on .wi{transform:none}
+.fx{opacity:0;transform:translateY(22px);transition:opacity .9s var(--e2),transform .9s var(--e2)}
+.fx.on{opacity:1;transform:none}
+.zoom{overflow:hidden}
+.zoom>img{transform:scale(1.06);transition:transform 2.6s var(--e2)}
+.zoom.on>img{transform:none}
+
+/* en-tête */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:90;padding:12px 2% 0;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.hdr.cache{transform:translateY(-110%)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 6px 0 14px;border-radius:var(--r-bar);background:rgba(22,23,21,.92);backdrop-filter:blur(10px)}
+.logo{display:block;height:28px}
+.logo svg,.logo img{height:100%;width:auto;display:block;max-width:none}
+.nav{display:none}
+.bar .btns{display:none}
+.burger{width:44px;height:44px;display:grid;place-items:center;color:var(--acc)}
+.mact{display:flex;align-items:center;gap:6px}
+.mtel{width:44px;height:44px;border-radius:var(--r-btn);display:grid;place-items:center;background:var(--sage);border:3px solid var(--sage-ring);color:var(--b900)}
+.mtel svg{width:18px;height:18px}
+.mdev{padding:6px 12px;font-size:14px;line-height:24px;border-width:3px}
+.burger svg{width:26px;height:26px}
+.off{position:fixed;inset:0;z-index:150;background:var(--b900);padding:90px 30px 40px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.off.on{opacity:1;visibility:visible}
+.off a.l{font-size:22px;font-weight:500;padding:6px 0}
+.off .x{position:absolute;top:22px;right:22px;color:var(--acc)}
+.off .x svg{width:34px;height:34px}
+.off .btns{margin-top:22px;justify-content:center}
+.off .logo{height:40px;margin-bottom:26px}
+
+/* hero */
+.hero{position:relative;min-height:max(720px,100svh);padding:108px 0 92px;display:flex;flex-direction:column;overflow:hidden;background:var(--b950)}
+.hero>.c{flex:1;width:100%}
+.hero .tx{flex:1}
+.hero .tx>.btns{margin-top:auto}
+.hb{opacity:0;transform:translateY(22px);animation:hbin .9s var(--e2) 1.3s forwards}
+@keyframes hbin{to{opacity:1;transform:none}}
+.hero .bg{position:absolute;inset:0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;object-position:50% 100%;transform:scale(1.06);animation:dz 3.2s cubic-bezier(.25,.46,.45,.94) .2s forwards}
+@keyframes dz{to{transform:none}}
+.hero .bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,15,13,.9) 0%,rgba(14,15,13,.72) 36%,rgba(14,15,13,.08) 58%,rgba(14,15,13,0) 72%,rgba(14,15,13,.55) 100%)}
+.hero .c{position:relative;display:flex;flex-direction:column;gap:18px}
+.hero .pill{background:rgba(255,255,255,.08);backdrop-filter:blur(6px)}
+.note{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500}
+.stars{display:flex;gap:2px}
+.stars svg{width:15px;height:15px}
+.note u{text-underline-offset:3px}
+.sub{font-weight:700;font-size:13px;line-height:20px}
+.sub i{font-style:normal;color:var(--acc);padding:0 3px}
+.hero .lead{max-width:34ch;font-size:15px}
+.stairs{display:none}
+.hero .btns{flex-wrap:nowrap}.hero .btns .btn{flex:1 1 auto;padding:11px 12px}
+
+/* vagues */
+.wave{display:block;width:100%;height:56px;color:var(--b900);margin-bottom:-1px}
+.wave.cr{color:var(--cream)}
+
+/* section sombre avec symbole du logo en ton sur ton */
+.dk{position:relative;background:var(--b900);overflow:clip}
+.dk.why,.dk.real{--wh:56px;background:linear-gradient(transparent var(--wh),var(--b900) var(--wh))}
+.sym{position:absolute;pointer-events:none;color:#fff;opacity:.035}
+.sym svg{width:100%;height:auto;display:block}
+.sym svg *{fill:currentColor!important}
+
+/* pourquoi */
+.why{margin-top:-56px;padding:0 0 70px}
+.why .wave{position:relative;z-index:2}
+.cards3{display:grid;gap:14px;margin-top:34px}
+.card{position:relative;border:2px solid var(--soft);border-radius:var(--r-card);padding:34px 18px 26px;text-align:center;backdrop-filter:blur(5px);overflow:hidden}
+.card:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--acc);transition:width .35s ease}
+.card:hover:after{width:100%}
+.tile{width:104px;height:96px;margin:0 auto 18px}
+.card .h3{max-width:13ch;margin:0 auto}
+.card p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.78);margin:12px auto 0;max-width:36ch}
+
+/* prestations */
+.svc{padding:40px 0 70px}
+.svc .top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.arrows{display:none;gap:10px}
+.arrows.marr{display:flex;justify-content:center;margin-top:22px}
+.arrows button{width:44px;height:44px;border-radius:50%;background:var(--sage);color:var(--b900);display:grid;place-items:center;transition:transform .2s,opacity .2s}
+.arrows button:hover{transform:scale(1.08)}
+.arrows button[disabled]{opacity:.4}
+.arrows svg{width:20px;height:20px}
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--g);scrollbar-width:none;margin-top:30px;padding:0 var(--g) 4px;cursor:grab}
+.rail::-webkit-scrollbar{display:none}
+.sv{flex:0 0 72%;scroll-snap-align:start;position:relative;min-height:340px;border-radius:var(--r-card);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background:var(--b820)}
+.sv>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv .wb{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px;padding:10px 18px;background:#fff;color:var(--b900)}
+.sv .wb b{font-weight:500;font-size:18px;line-height:1.02;max-width:11ch}
+.chk{flex:none;width:32px;height:32px}
+.sv.more{background:var(--grad-card);border:4px solid rgba(255,255,255,.16);padding:28px 22px;justify-content:space-between}
+.sv.more b{font-weight:500;font-size:26px;line-height:1}
+
+/* à propos (carte à cheval) */
+.about-w{position:relative;background:var(--cream);display:flow-root}
+.about-w:before{content:"";position:absolute;left:0;right:0;top:0;height:120px;background:var(--b900)}
+.about{position:relative;margin:0 auto;width:calc(100% - 20px);border-radius:var(--r-card);overflow:hidden;background:var(--grad-card)}
+.about .ph{position:relative;height:330px}
+.about .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.about .ph:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,36,34,0) 55%,#2a2b29 100%)}
+.tagn{position:absolute;right:14px;bottom:18px;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.tagn .nm{background:var(--b900);color:#fff;font-weight:600;font-size:15px;line-height:1.1;padding:6px 10px;border-radius:4px}
+.chipw{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--b900);font-weight:600;font-size:12px;padding:5px 11px 5px 5px;border-radius:100px}
+.chipw .chk{width:20px;height:20px}
+.about .tx{position:relative;padding:22px 20px 34px;display:flex;flex-direction:column;gap:18px}
+.about .tx p{font-size:15px;line-height:1.55;color:rgba(255,255,255,.82)}
+.about .tx{align-items:center;text-align:center;padding:26px 22px 38px}
+.about .tx .pill{align-self:center}
+
+/* secteur */
+.zone{position:relative;background:var(--cream);color:var(--b900);padding:80px 0 120px;overflow:hidden}
+.zone .sym{color:var(--b900);opacity:.045}
+.cities{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:32px;list-style:none}
+.cities li{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:376px;padding:9px 14px 9px 9px;font-weight:500;font-size:14px;transition:transform .3s}
+.cities li:hover{transform:rotate(-4deg)}
+.cities svg{width:18px;height:22px}
+
+/* réalisations */
+.real{margin-top:-54px;padding:0 0 80px}
+.real .wave{position:relative;z-index:2}
+.slides{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 6vw 6px;margin-top:34px}
+.slides::-webkit-scrollbar{display:none}
+.sl{flex:0 0 88vw;scroll-snap-align:center;border:4px solid #2C2E2B;border-radius:20px;overflow:hidden;background:var(--b860);display:flex;flex-direction:column}
+.sl .ph{position:relative;height:300px}
+.sl .ph img{width:100%;height:100%;object-fit:cover}
+.yr{position:absolute;left:12px;top:12px;background:rgba(22,23,21,.75);backdrop-filter:blur(6px);font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:100px}
+.sl .pn{position:relative;flex:1;padding:20px 18px 24px;background:var(--grad-panel)}
+.sl .pn>*{position:relative}
+.sl .loc{font-size:13px;color:rgba(255,255,255,.65);margin-top:6px}
+.ticks{list-style:none;margin-top:14px;display:grid;gap:7px}
+.ticks li{display:grid;grid-template-columns:18px 1fr;gap:9px;font-size:14px;line-height:1.4}
+.ticks svg{width:15px;height:15px;margin-top:2px;color:var(--acc)}
+.amt{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.amt span{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:100px;border:1.5px solid rgba(255,255,255,.22)}
+.sarrows{display:flex;justify-content:center;gap:12px;margin-top:22px}
+
+/* processus */
+.proc{padding:20px 0 90px}
+.steps{display:flex;flex-direction:column;gap:18px;margin:34px auto 0;padding:0 var(--g)}
+.st{position:sticky;top:calc(92px + var(--i) * 14px);border:2px solid var(--line);border-radius:var(--r-card);padding:14px;background:var(--b860);display:flex;flex-direction:column;gap:14px;transform-origin:50% 0;box-shadow:0 -14px 34px rgba(0,0,0,.28);will-change:transform}
+.st .ph{height:190px;border-radius:8px;overflow:hidden}
+.st .ph img{width:100%;height:100%;object-fit:cover}
+.st .tx{display:flex;flex-direction:column;gap:12px}
+.num{width:42px;height:44px}
+.st p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.75)}
+.proc .ctr .btn{margin-top:34px}
+
+/* bureau d'études (clair) */
+.be{position:relative;background:var(--cream);color:var(--b900);padding:80px 0 40px;overflow:hidden}
+.be .sym{color:var(--b900);opacity:.045}
+.be .grid{display:grid;gap:30px}
+.be .vis{position:relative;border-radius:var(--r-card);overflow:hidden;background:var(--grad-card);padding:14px;min-height:300px}
+.be .vis img{width:100%;height:250px;object-fit:cover;border-radius:12px;border:5px solid rgba(255,255,255,.14)}
+.be .vis .lab{position:absolute;right:22px;bottom:22px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.soft{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.soft span{font-size:13px;font-weight:500;padding:7px 13px;border-radius:100px;background:#fff}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.team div{background:#fff;border-radius:12px;padding:14px}
+.team b{display:block;font-weight:500;font-size:32px;line-height:.9}
+.team span{display:block;font-size:13px;color:#55574F;margin-top:6px;line-height:1.3}
+
+/* faq */
+.faq{position:relative;background:var(--cream);color:var(--b900);padding:60px 0 300px}
+.faq .grid{display:grid;gap:30px}
+.acc{display:grid;gap:12px;margin-top:26px}
+.q{border-radius:10px;background:var(--faq);overflow:hidden}
+.q button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:left;padding:16px 16px 16px 18px;font-weight:500;font-size:15.5px;line-height:1.2;color:var(--b900)}
+.q button svg{flex:none;width:26px;height:26px;transition:transform .3s}
+.q .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--e2)}
+.q .a>div{overflow:hidden}
+.q .a p{padding:0 46px 18px 18px;font-size:14.5px;line-height:1.5;color:#44463F}
+.q.on{background:var(--faq-on)}
+.q.on .a{grid-template-rows:1fr}
+.q.on button svg{transform:rotate(180deg)}
+.faq .vis{position:relative;border-radius:var(--r-card);overflow:hidden;min-height:280px}
+.faq .vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.faq .vis:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(14,15,13,.78))}
+.faq .vis .sl2{position:absolute;left:20px;right:20px;bottom:18px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;color:#fff}
+.faq .vis .sl2 b{font-weight:500;font-size:26px;line-height:.95;max-width:12ch}
+.faq .vis .sl2 svg,.faq .vis .sl2 img{width:46px;height:auto}
+
+/* appel à l'action (carte à cheval) */
+.cta-w{position:relative;background:var(--b900);padding:0 0 80px;display:flow-root}
+.cta{position:relative;margin:-250px auto 0;width:calc(100% - 20px);max-width:1270px;border-radius:29px;background:var(--b860);border:8px solid rgba(255,255,255,.08);padding:56px 20px 50px;text-align:center;overflow:hidden}
+.cta>img.bgp{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+.cta:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,23,21,.86) 0%,rgba(22,23,21,.72) 55%,rgba(22,23,21,.9) 100%)}
+.cta>*:not(img){position:relative;z-index:2}
+.cta .btns{justify-content:center;margin-top:28px}
+.reas{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:28px;list-style:none}
+.reas li{display:inline-flex;align-items:center;gap:8px;border:2px solid rgba(255,255,255,.22);border-radius:376px;padding:5px 14px 5px 5px;font-weight:500;font-size:14.5px;transition:transform .3s}
+.reas li:hover{transform:rotate(-4deg)}
+.reas .chk{width:22px;height:22px}
+
+/* contact */
+.ct{padding:10px 0 80px}
+.ct .grid{display:grid;gap:30px;margin-top:34px}
+.coord{display:grid;gap:12px}
+.coord a,.coord div{display:flex;gap:14px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:14px 16px}
+.coord svg{flex:none;width:22px;height:22px;color:var(--acc)}
+.coord span{display:block;font-size:12.5px;color:rgba(255,255,255,.6)}
+.coord b{font-weight:500;font-size:16px}
+form{display:grid;gap:12px;background:var(--b860);border:2px solid var(--line);border-radius:var(--r-card);padding:20px}
+input,select,textarea{font:inherit;font-size:15px;border:0;border-radius:5px;padding:14px;background:#fff;color:var(--b900);width:100%}
+textarea{min-height:110px;resize:vertical}
+.ok{font-size:14px;color:var(--acc);display:none}
+
+/* pied */
+footer{background:var(--b900);padding:10px 0 110px}
+.fcard{background:var(--b880);border:2px solid var(--line);border-radius:var(--r-card);padding:46px 20px 26px;display:grid;gap:34px;text-align:center}
+.fcard .logo{height:46px;margin:0 auto}
+.fcard h4{font-weight:500;font-size:26px;line-height:1;margin-bottom:12px}
+.fcard ul{list-style:none;display:grid;gap:4px;font-weight:300;font-size:14px}
+.fcard ul a:hover{color:var(--acc)}
+.legal{font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.6}
+.legal b{color:#fff;font-weight:500}
+
+/* barre d'appel mobile */
+.callbar{position:fixed;left:10px;right:10px;bottom:10px;z-index:80;display:flex;gap:8px;padding:6px;border-radius:12px;background:rgba(22,23,21,.92);backdrop-filter:blur(12px);transform:translateY(150%);transition:transform .45s var(--e1)}
+.callbar.on{transform:none}
+.callbar .btn{flex:1;padding:10px 12px}
+
+@media(min-width:768px){
+  .sv{flex-basis:44%}
+  .st{flex-basis:46%}
+  .sl{flex-basis:82vw}
+}
+@media(min-width:1024px){
+  :root{--g:20px}
+  body{font-size:17px}
+  .h1v{font-size:clamp(64px,6.3vw,91px)}
+  .h2{font-size:clamp(46px,4.2vw,60px);line-height:.8}
+  .h3{font-size:30px;line-height:1}
+  .lead{font-size:18px;line-height:1.67}
+  .pill{font-size:17px;line-height:31px;padding:4px 16px 4px 15px}
+  .btn{font-size:17px;line-height:31px;padding:12px 28px}
+  .hdr{padding:20px 30px 0}
+  .bar{height:84px;padding:5px 10px 5px 22px}
+  .logo{height:46px}
+  .nav{display:flex;gap:32px;font-weight:500;font-size:16px}
+  .nav a:hover{color:var(--acc)}
+  .bar .btns{display:flex}
+  .bar .btn{padding:10px 16px;font-size:15.5px;line-height:26px}
+  .mact{display:none}
+  .hero{min-height:max(780px,100vh);padding:150px 0 190px;flex-direction:row;align-items:center}
+  .hero .tx>.btns{margin-top:0}
+  .hero>.c{width:100%}
+  .hero .bg img{object-position:50% 60%}
+  .hero .bg:after{background:linear-gradient(90deg,rgba(14,15,13,.9) 0%,rgba(14,15,13,.6) 40%,rgba(14,15,13,.1) 70%),linear-gradient(180deg,rgba(14,15,13,.5) 0,rgba(14,15,13,0) 30%)}
+  .hero .c{display:grid;grid-template-columns:1fr auto;align-items:center}
+  .hero .btns .btn{flex:none;padding:12px 28px}
+  .hero .tx{display:flex;flex-direction:column;gap:26px;max-width:860px}
+  .note,.sub{font-size:16px}
+  .hero .lead{font-size:18px;max-width:46ch}
+  .stairs{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+  .stairs .chipw{font-size:16px;padding:8px 18px 8px 8px}
+  .stairs .chipw .chk{width:28px;height:28px}
+  .stairs .chipw:nth-child(2){margin-right:37px;opacity:.92}.stairs .chipw:nth-child(3){margin-right:74px;opacity:.82}.stairs .chipw:nth-child(4){margin-right:111px;opacity:.65}
+  .wave{height:130px}
+  .dk.why,.dk.real{--wh:130px}
+  .why{margin-top:-130px;padding-bottom:110px}
+  .cards3{grid-template-columns:repeat(3,1fr);gap:17px;margin-top:44px}
+  .card{padding:50px 26px 32px}
+  .tile{width:140px;height:130px}
+  .card p{font-size:16.5px;line-height:1.65}
+  .svc{padding:40px 0 470px}
+  .arrows{display:flex}
+  .arrows.marr{display:none}
+  .rail{padding-left:max(20px,calc((100vw - 1250px)/2));gap:30px}
+  .sv{flex:0 0 300px;min-height:443px}
+  .sv .wb{min-height:84px;padding:0 24px}
+  .sv .wb b{font-size:23px}
+  .chk{width:36px;height:36px}
+  .about-w:before{height:371px}
+  .about-w{background:var(--cream)}
+  .about{width:85vw;max-width:1500px;margin-top:-371px;display:grid;grid-template-columns:47% 53%;min-height:690px}
+  .about .ph{order:2;height:auto}
+  .about .ph:after{background:linear-gradient(90deg,#2a2b29 0%,rgba(42,43,41,0) 38%)}
+  .about .tx{order:1;padding:7vw 40px 60px 7vw;justify-content:center;gap:24px;align-items:flex-start;text-align:left}
+  .about .tx .pill{align-self:flex-start}
+  .about .tx p{font-size:17px;line-height:1.7;max-width:56ch}
+  .tagn{right:30px;bottom:34px}
+  .tagn .nm{font-size:20px}
+  .chipw{font-size:14px;padding:6px 14px 6px 6px}
+  .chipw .chk{width:24px;height:24px}
+  .zone{padding:120px 0 200px}
+  .cities{gap:16px;max-width:960px;margin-left:auto;margin-right:auto}
+  .cities li{font-size:17px;padding:10px 16px 10px 10px}
+  .real{margin-top:-130px;padding-bottom:110px}
+  .slides{padding:0 11vw 6px;gap:60px}
+  .sl{flex:0 0 78vw;flex-direction:row;min-height:520px}
+  .sl .ph{flex:0 0 56%;height:auto}
+  .sl .pn{margin-left:-10px;padding:56px 50px 46px 64px;display:flex;flex-direction:column;justify-content:center}
+  .ticks li{font-size:17px}
+  .proc{padding:40px 0 120px}
+  .steps{align-items:center;gap:26px;margin-top:50px}
+  .st{width:min(1000px,80%);top:calc(130px + var(--i) * 18px);flex-direction:row;align-items:stretch;gap:44px;padding:28px;min-height:300px}
+  .st .ph{flex:0 0 35%;height:244px;align-self:center}
+  .st .tx{gap:16px;justify-content:center}
+  .st p{font-size:17px;line-height:1.65;max-width:46ch}
+  .num{width:54px;height:57px}
+  .be{padding:110px 0 70px}
+  .be .grid{grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .be .vis{min-height:460px;padding:22px}
+  .be .vis img{height:416px}
+  .team{grid-template-columns:repeat(4,1fr)}
+  .faq{padding:70px 0 360px}
+  .faq .grid{grid-template-columns:1fr 1fr;gap:60px;align-items:stretch}
+  .faq .vis{order:2;min-height:620px}
+  .q button{font-size:20px;padding:18px 20px 18px 22px}
+  .q .a p{font-size:16.5px;padding:0 50px 20px 22px}
+  .cta{margin-top:-290px;padding:84px 60px 76px}
+  .reas{flex-direction:row;justify-content:center;gap:24px}
+  .reas li{font-size:17px;padding:8px 16px 8px 8px}
+  .reas .chk{width:26px;height:26px}
+  .ct .grid{grid-template-columns:5fr 6fr;gap:60px}
+  footer{padding:20px 0 60px}
+  .fcard{grid-template-columns:1.2fr 1fr 1fr 1fr;text-align:left;padding:70px 60px 34px;gap:40px}
+  .fcard .logo{margin:0}
+  .fcard h4{font-size:32px}
+  .fcard ul{font-size:16.5px}
+  .legal{grid-column:1/-1;text-align:center;border-top:2px solid var(--line);padding-top:24px}
+  .callbar{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}body:before{display:none}.wi,.fx,.zoom>img{transform:none!important;opacity:1!important}}
+</style>
+</head>
+<body>
+
+<header class="hdr" id="hdr"><div class="bar">
+  <a class="logo" href="#top" aria-label="Oriol, accueil">LOGO_CLIENT</a>
+  <nav class="nav" aria-label="Navigation principale"><a href="#metiers">Métiers</a><a href="#apropos">L'entreprise</a><a href="#realisations">Réalisations</a><a href="#methode">Méthode</a><a href="#questions">Questions</a></nav>
+  <div class="btns"><a class="btn s" href="tel:+33477747718">04 77 74 77 18</a><a class="btn" href="#contact">Demander un devis</a></div>
+  <div class="mact"><a class="mtel" href="tel:+33477747718" aria-label="Appeler Oriol">PHONE</a><a class="btn mdev" href="#contact">Devis</a><button class="burger" id="ouvrir" aria-label="Ouvrir le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button></div>
+</div></header>
+<nav class="off" id="off" aria-label="Menu">
+  <button class="x" id="fermer" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <span class="logo">LOGO_CLIENT</span>
+  <a class="l" href="#metiers">Métiers</a><a class="l" href="#apropos">L'entreprise</a><a class="l" href="#realisations">Réalisations</a><a class="l" href="#methode">Méthode</a><a class="l" href="#questions">Questions</a><a class="l" href="#contact">Contact</a>
+  <div class="btns"><a class="btn s" href="tel:+33477747718">04 77 74 77 18</a><a class="btn" href="#contact">Demander un devis</a></div>
+</nav>
+
+<main id="top">
+<section class="hero">
+  <div class="bg"><img src="img/hero-levage.jpg" alt="Techniciens d'Oriol guidant une unité de climatisation levée par une grue sur le chantier Technologie Services à Marclopt"></div>
+  <div class="c">
+    <div class="tx" style="display:flex;flex-direction:column;gap:18px">
+      <h1 class="pill">Chauffagiste, climaticien et plombier à Saint-Étienne</h1>
+      <a class="note" href="#questions"><span class="stars">STARS4</span><span>Noté 4/5 sur <u>Google</u>, 25 avis</span></a>
+      <h2 class="h1v split">Le chaud, le froid et l'eau, depuis 1943</h2>
+      <p class="sub">Chauffage <i>/</i> Climatisation <i>/</i> Ventilation <i>/</i> Plomberie</p>
+      <p class="lead fx">Entreprise familiale stéphanoise : notre bureau d'études conçoit, nos équipes installent, MATCH assure l'entretien.</p>
+      <div class="btns hb"><a class="btn" href="#contact">Demander un devis</a><a class="btn s" href="#realisations">Nos réalisations</a></div>
+    </div>
+    <div class="stairs" aria-hidden="true"><span class="chipw">CHK Chaufferies jusqu'à 2 000 kW</span><span class="chipw">CHK Climatisation et eau glacée</span><span class="chipw">CHK Ventilation double flux</span><span class="chipw">CHK Plomberie sanitaire</span></div>
+  </div>
+</section>
+
+<section class="dk why">
+  <svg class="wave" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 70C110 44 190 92 320 78S540 30 690 46s250 52 380 40 210-58 330-50c18 1 30 4 40 7V130H0Z"/></svg>
+  <div class="c">
+    <div class="head ctr"><span class="pill">Votre chauffagiste dans la Loire depuis 1943</span><h2 class="h2 split" style="max-width:12ch">Pourquoi travailler avec nous ?</h2></div>
+    <div class="cards3">
+      <article class="card fx"><svg class="tile" viewBox="0 0 140 130" aria-hidden="true"><path fill="#2E2F2C" d="M14 8c32-6 82-7 112 2 9 3 12 12 12 24 1 22 0 48-1 68-1 15-7 22-20 24-34 4-70 4-102 0C3 124 1 116 1 104 0 80 0 52 2 30 3 16 6 10 14 8Z"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M44 88V44h40l12 12v32H44Z"/><path d="M84 44v12h12M54 62h32M54 72h32M54 80h20"/></g></svg><h3 class="h3">Un bureau d'études intégré</h3><p>Chaque installation est <strong>conçue et dimensionnée chez nous</strong>, par nos chargés d'études, sans prestataire extérieur.</p></article>
+      <article class="card fx"><svg class="tile" viewBox="0 0 140 130" aria-hidden="true"><path fill="#2E2F2C" d="M12 10c30-7 86-6 114 0 10 2 13 10 13 22 1 24 1 48-1 70-1 14-6 22-18 23-36 4-72 3-104-1C4 122 1 114 1 102 0 78 0 54 2 32 3 18 5 12 12 10Z"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="70" cy="65" r="26"/><path d="M70 39v8M70 83v8M44 65h8M88 65h8M70 65l12-10"/></g></svg><h3 class="h3">De l'étude à l'entretien</h3><p>Un seul interlocuteur du premier rendez-vous à la mise en service, puis <strong>l'entretien par MATCH</strong>, notre entreprise sœur.</p></article>
+      <article class="card fx"><svg class="tile" viewBox="0 0 140 130" aria-hidden="true"><path fill="#2E2F2C" d="M16 7c30-5 84-5 110 3 9 3 12 11 12 23 1 22 1 50-1 70-1 14-7 21-19 23-34 5-72 4-104 0C3 124 1 116 1 104 0 80 0 54 2 32 3 16 7 9 16 7Z"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M70 34l26 10v20c0 18-12 28-26 34-14-6-26-16-26-34V44l26-10Z"/><path d="M58 66l9 9 16-18"/></g></svg><h3 class="h3">Certifiés RGE</h3><p><strong>Qualibat RGE</strong> n° E-E52581, plomberie technicité supérieure (5113) et Qualigaz : des installations conformes aux exigences techniques et environnementales.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="dk svc" id="metiers">
+  <div class="c top"><div class="head"><span class="pill">Nos métiers</span><h2 class="h2 split" style="max-width:13ch">Six métiers, une seule équipe</h2></div><div class="arrows" data-for="rail"><button data-d="-1" aria-label="Précédent">ARW_L</button><button data-d="1" aria-label="Suivant">ARW_R</button></div></div>
+  <div class="rail" id="rail">
+    <a class="sv fx" href="#contact"><img src="img/chaufferie-gaz.jpg" alt="Chaufferie gaz installée par Oriol" loading="lazy"><span class="wb"><b>Chauffage</b>CHK</span></a>
+    <a class="sv fx" href="#contact"><img src="img/groupe-eau-glacee.jpg" alt="Groupe d'eau glacée" loading="lazy"><span class="wb"><b>Climatisation</b>CHK</span></a>
+    <a class="sv fx" href="#contact"><img src="img/cta-toiture.jpg" alt="Centrale de traitement d'air en toiture" loading="lazy"><span class="wb"><b>Ventilation</b>CHK</span></a>
+    <a class="sv fx" href="#contact"><img src="img/sanitaires-stade.jpg" alt="Sanitaires installés par Oriol" loading="lazy"><span class="wb"><b>Plomberie sanitaire</b>CHK</span></a>
+    <a class="sv fx" href="#contact"><img src="img/solaire.jpg" alt="Capteurs solaires thermiques" loading="lazy"><span class="wb"><b>Énergies renouvelables</b>CHK</span></a>
+    <a class="sv fx" href="#contact"><img src="img/vapeur.jpg" alt="Chaudière vapeur industrielle" loading="lazy"><span class="wb"><b>Fluides industriels</b>CHK</span></a>
+    <div class="sv more fx"><b>Votre projet n'est pas dans la liste ?</b><a class="btn" href="#contact">Parlons-en</a></div>
+  </div>
+  <div class="arrows marr" data-for="rail"><button data-d="-1" aria-label="Précédent">ARW_L</button><button data-d="1" aria-label="Suivant">ARW_R</button></div>
+</section>
+
+<section class="about-w" id="apropos">
+  <div class="about fx">
+    <div class="ph"><img src="img/dirigeants.jpg" alt="Alain Odouard, Gaëtan Roubin et Nicolas Cellier, dirigeants d'Oriol, devant un véhicule de l'entreprise" loading="lazy"><div class="tagn"><span class="nm">Alain, Gaëtan et Nicolas</span><span class="chipw">CHK Anciens chargés d'affaires</span><span class="chipw">CHK Dirigeants depuis 2012</span><span class="chipw">CHK Entreprise familiale</span></div></div>
+    <div class="tx">
+      <span class="pill">L'entreprise</span>
+      <h2 class="h2 split" style="max-width:12ch">Trois générations au service du confort</h2>
+      <p>Fondée à Saint-Étienne en <strong>1943 par Joseph Oriol</strong>, l'entreprise passe à ses fils Jacques et Alain en 1980. En 1989, la famille crée MATCH pour le dépannage et la maintenance.</p>
+      <p>Depuis 2012, <strong>trois anciens chargés d'affaires de la maison</strong> la dirigent. Aujourd'hui, 72 collaborateurs entre Oriol et MATCH, dans des locaux partagés rue de la Tour.</p>
+      <div class="btns fx btn-last"><a class="btn s" href="tel:+33477747718">PHONE 04 77 74 77 18</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="zone on-cream">
+  <div class="c head ctr" style="position:relative">
+    <span class="pill">Zone d'intervention</span>
+    <h2 class="h2 split" style="max-width:13ch">À Saint-Étienne, dans la Loire et autour de Lyon</h2>
+    <p class="lead" style="max-width:46ch">Nos chantiers vont des écoles et hôpitaux de la Loire aux bâtiments industriels de la région lyonnaise.</p>
+    <ul class="cities fx">CITIES</ul>
+  </div>
+</section>
+
+<section class="dk real" id="realisations">
+  <svg class="wave" viewBox="0 0 1440 130" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 52c120 30 230-12 360 2s230 46 380 34 260-50 400-44c110 5 200 30 300 22v64H0Z"/></svg>
+  <div class="c head ctr" style="position:relative"><span class="pill">Nos réalisations</span><h2 class="h2 split" style="max-width:14ch">Des bâtiments que toute la Loire connaît</h2></div>
+  <div class="slides" id="slides">
+    <article class="sl fx"><div class="ph zoom"><img src="img/stade.jpg" alt="Stade Geoffroy-Guichard" loading="lazy"><span class="yr">2011 à 2015</span></div><div class="pn"><h3 class="h3">Stade Geoffroy-Guichard</h3><p class="loc">Saint-Étienne, pour Saint-Étienne Métropole</p><ul class="ticks"><li>TICK<span>Chauffage par pompe à chaleur de 500 kW</span></li><li>TICK<span>300 cassettes de diffusion</span></li><li>TICK<span>7 centrales d'air, de 6 500 à 34 000 m³/h</span></li><li>TICK<span>Plomberie sanitaire publique et privée</span></li></ul><div class="amt"><span>3 500 000 € HT</span><span>Chauffage</span><span>Ventilation</span><span>Plomberie</span></div></div></article>
+    <article class="sl fx"><div class="ph zoom"><img src="img/hopital-nord.jpg" alt="Groupe de condensation héliporté au-dessus de l'hôpital Nord" loading="lazy"><span class="yr">Avril 2025</span></div><div class="pn"><h3 class="h3">Hôpital Nord, CHU de Saint-Étienne</h3><p class="loc">Héliportage pour le futur centre de données</p><ul class="ticks"><li>TICK<span>Deux groupes de condensation haute capacité posés sur le toit</span></li><li>TICK<span>Opération planifiée un dimanche pour préserver la vie de l'hôpital</span></li><li>TICK<span>Périmètre de sécurité et préparation des unités en amont</span></li></ul><div class="amt"><span>Climatisation</span><span>Milieu hospitalier</span></div></div></article>
+    <article class="sl fx"><div class="ph zoom"><img src="img/compagnons-devoir.jpg" alt="Bâtiment des Compagnons du Devoir à Brignais" loading="lazy"><span class="yr">2024</span></div><div class="pn"><h3 class="h3">Les Compagnons du Devoir</h3><p class="loc">Brignais</p><ul class="ticks"><li>TICK<span>Chaufferie bois de 400 kW</span></li><li>TICK<span>Salles de classe et atelier chauffés par panneaux radiants</span></li><li>TICK<span>Centrale double flux et désenfumage des parkings</span></li></ul><div class="amt"><span>1 550 000 € HT</span><span>Chauffage</span><span>Ventilation</span></div></div></article>
+    <article class="sl fx"><div class="ph zoom"><img src="img/musee-mine.jpg" alt="Musée de la Mine, parc Couriot" loading="lazy"><span class="yr">2014</span></div><div class="pn"><h3 class="h3">Musée de la Mine, parc Couriot</h3><p class="loc">Saint-Étienne, pour la Ville de Saint-Étienne</p><ul class="ticks"><li>TICK<span>Chauffage par deux chaudières à condensation</span></li><li>TICK<span>Groupe d'eau glacée pour la température et l'humidité des salles</span></li><li>TICK<span>Conditions de conservation des collections garanties</span></li></ul><div class="amt"><span>530 000 € HT</span><span>Chauffage</span><span>Climatisation</span></div></div></article>
+    <article class="sl fx"><div class="ph zoom"><img src="img/zenith.jpg" alt="Réseaux sous la charpente du Zénith de Saint-Étienne" loading="lazy"><span class="yr">2008</span></div><div class="pn"><h3 class="h3">Zénith de Saint-Étienne</h3><p class="loc">Saint-Étienne, pour Saint-Étienne Métropole</p><ul class="ticks"><li>TICK<span>Plancher chauffant de 2 000 m²</span></li><li>TICK<span>Réseaux d'eaux pluviales</span></li><li>TICK<span>Plomberie sanitaire à la mesure du bâtiment</span></li></ul><div class="amt"><span>480 000 € HT</span><span>Chauffage</span><span>Plomberie</span></div></div></article>
+  </div>
+  <div class="sarrows arrows" data-for="slides" style="display:flex"><button data-d="-1" aria-label="Précédent">ARW_L</button><button data-d="1" aria-label="Suivant">ARW_R</button></div>
+</section>
+
+<section class="dk proc" id="methode">
+  <div class="c head ctr"><span class="pill">Méthode</span><h2 class="h2 split" style="max-width:11ch">Votre projet, étape par étape</h2></div>
+  <div class="steps">
+    <a class="st" style="--i:0" href="#contact"><div class="ph zoom"><img src="img/bureau-etudes.jpg" alt="Chargés d'affaires d'Oriol autour d'un plan" loading="lazy"></div><div class="tx"><svg class="num" viewBox="0 0 54 57" aria-hidden="true"><path fill="#3A3C37" d="M8 3l40 2c4 0 6 3 6 7l-1 34c0 5-3 8-8 8L6 52c-4 0-6-3-6-7l1-34c0-5 3-8 7-8Z"/><text x="27" y="38" text-anchor="middle" font-family="Bricolage Grotesque" font-size="24" font-weight="500" fill="#F2F1EC">1</text></svg><h3 class="h3">Échange<br>sur votre besoin</h3><p>Un chargé d'affaires analyse votre projet et reste votre interlocuteur jusqu'à la fin du chantier.</p></div></a>
+    <a class="st" style="--i:1" href="#contact"><div class="ph zoom"><img src="img/bureau-conception.jpg" alt="Bureau d'études d'Oriol" loading="lazy"></div><div class="tx"><svg class="num" viewBox="0 0 54 57" aria-hidden="true"><path fill="#3A3C37" d="M6 4l42-1c4 0 6 3 6 7l-1 36c0 4-3 7-7 7L7 54c-4 0-7-3-7-7l1-35c0-5 2-8 5-8Z"/><text x="27" y="38" text-anchor="middle" font-family="Bricolage Grotesque" font-size="24" font-weight="500" fill="#F2F1EC">2</text></svg><h3 class="h3">Conception<br>par le bureau d'études</h3><p>Plans, calculs et dimensionnement des réseaux, conformes à la réglementation thermique.</p></div></a>
+    <a class="st" style="--i:2" href="#contact"><div class="ph zoom"><img src="img/nacelle.jpg" alt="Technicien d'Oriol en nacelle sur un chantier" loading="lazy"></div><div class="tx"><svg class="num" viewBox="0 0 54 57" aria-hidden="true"><path fill="#3A3C37" d="M7 2l41 3c4 0 6 4 6 8l-2 33c0 5-3 8-8 8L6 53c-4 0-6-4-6-8l2-34c0-5 2-9 5-9Z"/><text x="27" y="38" text-anchor="middle" font-family="Bricolage Grotesque" font-size="24" font-weight="500" fill="#F2F1EC">3</text></svg><h3 class="h3">Réalisation<br>par nos équipes</h3><p>Chefs de chantier, monteurs chauffagistes, plombiers, gaineurs et frigoristes posent l'installation.</p></div></a>
+    <a class="st" style="--i:3" href="#contact"><div class="ph zoom"><img src="img/armoire-oriol.jpg" alt="Armoire de commande d'une installation Oriol" loading="lazy"></div><div class="tx"><svg class="num" viewBox="0 0 54 57" aria-hidden="true"><path fill="#3A3C37" d="M8 4l40-1c4 0 6 3 6 7v36c0 5-3 8-7 8L6 53c-4 0-6-3-6-7l2-34c0-5 2-8 6-8Z"/><text x="27" y="38" text-anchor="middle" font-family="Bricolage Grotesque" font-size="24" font-weight="500" fill="#F2F1EC">4</text></svg><h3 class="h3">Mise en service<br>et entretien</h3><p>Réglages, mise en route, puis suivi de vos équipements par MATCH avec un contrat d'entretien.</p></div></a>
+  </div>
+  <div class="c ctr"><a class="btn fx btn-last" href="#contact">Obtenir un devis</a></div>
+</section>
+
+<section class="be on-cream">
+  <div class="c grid" style="position:relative">
+    <div class="head">
+      <span class="pill">Bureau d'études</span>
+      <h2 class="h2 split" style="max-width:12ch">Tout est conçu ici, rien n'est sous-traité</h2>
+      <p class="lead">L'intégralité des études techniques est réalisée en interne : <strong>réseaux d'eau chaude et froide, eaux pluviales et usées, calculs de radiateurs, réseaux d'eau glacée</strong>. Résultat : plus de réactivité et une maîtrise totale du projet.</p>
+      <div class="team fx"><div><b>5</b><span>chargés d'affaires</span></div><div><b>5</b><span>chargés d'études</span></div><div><b>15</b><span>chefs de chantier</span></div><div><b>21</b><span>véhicules de chantier</span></div></div>
+      <div class="soft fx"><span>Trimble Nova</span><span>AutoCAD 3D</span><span>Revit</span><span>Navisworks</span><span>FISA SaniWin</span><span>FISA HydroCAB</span></div>
+    </div>
+    <div class="vis fx"><img src="img/bureau-conception.jpg" alt="Le bureau d'études d'Oriol" loading="lazy"><div class="lab"><span class="chipw">CHK Conception en 3D</span><span class="chipw">CHK Prévention de la légionellose</span><span class="chipw">CHK Réglementation thermique</span></div></div>
+  </div>
+</section>
+
+<section class="faq on-cream" id="questions">
+  <div class="c grid">
+    <div class="vis fx"><img src="img/facade-oriol.jpg" alt="Les locaux d'Oriol, rue de la Tour à Saint-Étienne" loading="lazy"><div class="sl2"><b>Le chaud, le froid et l'eau.</b>PICTO_SMALL</div></div>
+    <div>
+      <div class="head ctr"><span class="pill">Questions fréquentes</span><h2 class="h2 split" style="max-width:11ch">On répond à vos questions</h2></div>
+      <div class="acc" id="acc">
+        <div class="q on"><button aria-expanded="true">Intervenez-vous chez les particuliers ?CHEV</button><div class="a"><div><p>Oui. Six compagnons sont dédiés aux particuliers : un pôle installation pour les chaudières, planchers chauffants, pompes à chaleur et la climatisation, et un pôle dépannage pour la robinetterie, les chauffe-eau et la recherche de fuites.</p></div></div></div>
+        <div class="q"><button aria-expanded="false">Qui assure l'entretien après les travaux ?CHEV</button><div class="a"><div><p>MATCH, créée par la famille Oriol en 1989 et reprise entièrement en 2019, assure l'entretien et la maintenance des installations avec des contrats d'entretien.</p></div></div></div>
+        <div class="q"><button aria-expanded="false">Quelles puissances de chaufferie installez-vous ?CHEV</button><div class="a"><div><p>Des chaufferies gaz naturel, propane ou fuel de 20 à 2 000 kW, et des chaufferies bois de 30 à 800 kW, avec conduits de fumée, ventouses et tubages.</p></div></div></div>
+        <div class="q"><button aria-expanded="false">Êtes-vous certifiés RGE ?CHEV</button><div class="a"><div><p>Oui. Oriol est certifié Qualibat RGE (n° E-E52581), Qualibat EFF 4 / CA 8, qualifié en plomberie sanitaire technicité supérieure (5113) et Qualigaz.</p></div></div></div>
+        <div class="q"><button aria-expanded="false">Travaillez-vous en milieu hospitalier ?CHEV</button><div class="a"><div><p>Oui : centre de chirurgie maxillo-faciale à Saint-Étienne, extension de l'Hôpital privé Est Lyonnais, héliportage au CHU de Saint-Étienne. Le bureau d'études maîtrise la prévention de la légionellose et des infections.</p></div></div></div>
+        <div class="q"><button aria-expanded="false">Où se trouvent vos locaux ?CHEV</button><div class="a"><div><p>Au 79 rue de la Tour à Saint-Étienne : 460 m² de bureaux, 330 m² d'ateliers et plus de 2 300 m² de stockage. Ouvert du lundi au vendredi, de 8 h à 17 h.</p></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-w">
+  <div class="cta fx">
+    <img class="bgp" src="img/nacelle-vehicule.jpg" alt="" loading="lazy">
+    <span class="pill">Contactez Oriol à Saint-Étienne</span>
+    <h2 class="h2 split" style="max-width:16ch;margin:18px auto 0">Décrivez votre projet, recevez un chiffrage sur mesure</h2>
+    <div class="btns fx btn-last"><a class="btn" href="#contact">Décrire mon projet</a><a class="btn s" href="tel:+33477747718">Appeler Oriol</a></div>
+    <ul class="reas"><li>CHK Bureau d'études intégré</li><li>CHK Certifié Qualibat RGE</li><li>CHK Entretien assuré par MATCH</li></ul>
+  </div>
+</section>
+
+<section class="dk ct" id="contact">
+  <div class="c">
+    <div class="head ctr"><span class="pill">Contact</span><h2 class="h2 split" style="max-width:12ch">Parlons de votre installation</h2></div>
+    <div class="grid">
+      <div class="coord fx">
+        <a href="tel:+33477747718">PHONE<span><span>Téléphone</span><b>04 77 74 77 18</b></span></a>
+        <div>PIN<span><span>Adresse</span><b>79 rue de la Tour, 42000 Saint-Étienne</b></span></div>
+        <div>CLOCK<span><span>Horaires</span><b>Du lundi au vendredi, de 8 h à 17 h</b></span></div>
+      </div>
+      <form class="fx" onsubmit="event.preventDefault();this.querySelector('.ok').style.display='block'">
+        <input aria-label="Nom" placeholder="Nom et prénom"><input aria-label="Téléphone" placeholder="Téléphone" inputmode="tel">
+        <select aria-label="Votre besoin"><option>Chauffage</option><option>Climatisation</option><option>Ventilation</option><option>Plomberie</option><option>Énergies renouvelables</option><option>Dépannage</option><option>Contrat d'entretien</option></select>
+        <textarea aria-label="Votre projet" placeholder="Votre projet en quelques mots"></textarea>
+        <button class="btn" type="submit">Envoyer ma demande</button>
+        <p class="ok">Le formulaire sera actif sur le site final.</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="c"><div class="fcard">
+  <div><span class="logo">LOGO_CLIENT</span><p style="margin-top:20px;font-size:14.5px;color:rgba(255,255,255,.7)">Chauffage, climatisation, ventilation et plomberie à Saint-Étienne depuis 1943.</p><a class="btn s" href="tel:+33477747718" style="margin-top:20px">04 77 74 77 18</a></div>
+  <div><h4>Navigation</h4><ul><li><a href="#metiers">Métiers</a></li><li><a href="#apropos">L'entreprise</a></li><li><a href="#realisations">Réalisations</a></li><li><a href="#methode">Méthode</a></li><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact</a></li></ul></div>
+  <div><h4>Métiers</h4><ul><li>Chauffage</li><li>Climatisation</li><li>Ventilation</li><li>Plomberie sanitaire</li><li>Énergies renouvelables</li><li>Fluides industriels</li></ul></div>
+  <div><h4>Contact</h4><ul><li>79 rue de la Tour</li><li>42000 Saint-Étienne</li><li>Lundi au vendredi, 8 h à 17 h</li></ul></div>
+  <p class="legal"><b>Démo Widesign</b> : un aperçu de ce que pourrait être le site d'Oriol, visible jusqu'au 30 novembre 2026. Démo non cédée, reproduction interdite. <a href="https://widesign.fr" style="color:var(--acc)">widesign.fr</a></p>
+</div></div></footer>
+
+<div class="callbar" id="callbar"><a class="btn s" href="tel:+33477747718">PHONE Appeler</a><a class="btn" href="#contact">Demander un devis</a></div>
+
+<script>
+(function(){
+  if(new Date()>new Date("2026-11-30T23:59:59")){document.body.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;font:500 20px sans-serif;color:#fff;background:#1E1F1D">Cette démo a expiré.</div>';return}
+  var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+  // titres mot par mot
+  $$(".split").forEach(function(h){h.innerHTML=h.textContent.trim().split(/\s+/).map(function(w,i){return '<span class="w"><span class="wi" style="transition-delay:'+(i*50)+'ms">'+w+'</span></span>'}).join(" ")});
+  // orchestration : éléments décalés de 160 ms, boutons en dernier
+  var first=true;
+  var io=new IntersectionObserver(function(es){var k=0,base=first?350:0;first=false;
+    es.filter(function(e){return e.isIntersecting}).forEach(function(e){var el=e.target,d=base+k*160;if(el.classList.contains("btn-last"))d+=600;el.style.transitionDelay=d+"ms";if(el.classList.contains("split"))$$(".wi",el).forEach(function(w,i){w.style.transitionDelay=(d+i*50)+"ms"});el.classList.add("on");k++;io.unobserve(el)})},{rootMargin:"0px 0px -8% 0px",threshold:.05});
+  $$(".split,.fx,.zoom").forEach(function(el){io.observe(el)});
+  // en-tête qui se cache en descendant, revient en remontant
+  var hdr=$("#hdr"),cb=$("#callbar"),hero=$(".hero"),ly=scrollY,t=null;
+  addEventListener("scroll",function(){var y=scrollY;
+    if(y<10||y<ly){clearTimeout(t);t=null;hdr.classList.remove("cache")}else if(!t&&!hdr.classList.contains("cache")){t=setTimeout(function(){hdr.classList.add("cache");t=null},700)}
+    ly=y;cb.classList.toggle("on",hero.getBoundingClientRect().bottom<0)},{passive:true});
+  // méthode : les cartes s'empilent, celle du dessous recule
+  var sts=$$(".st");
+  function pile(){sts.forEach(function(c,k){var n=sts[k+1];if(!n){c.style.transform="";c.style.filter="";return}
+    var a=c.getBoundingClientRect(),b=n.getBoundingClientRect();var p=Math.max(0,Math.min(1,(a.bottom-b.top)/a.height));
+    c.style.transform="scale("+(1-p*.06)+")";c.style.filter="brightness("+(1-p*.35)+")"})}
+  addEventListener("scroll",pile,{passive:true});pile();
+  // menu
+  $("#ouvrir").onclick=function(){$("#off").classList.add("on");document.body.style.overflow="hidden"};
+  function fm(){$("#off").classList.remove("on");document.body.style.overflow=""}
+  $("#fermer").onclick=fm;$$("#off a").forEach(function(a){a.addEventListener("click",fm)});
+  // boutons : fond animé qui part du point d'entrée du curseur et repart par le point de sortie
+  $$(".btn").forEach(function(b){var f=document.createElement("span");f.className="bf";f.setAttribute("aria-hidden","true");f.innerHTML="<i></i><i></i>";b.insertBefore(f,b.firstChild);
+    function pos(e){var r=b.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+      b.style.setProperty("--ox",x+"px");b.style.setProperty("--oy",y+"px");
+      b.style.setProperty("--d",2*Math.hypot(Math.max(x,r.width-x),Math.max(y,r.height-y))+4+"px")}
+    b.addEventListener("pointerenter",function(e){if(e.pointerType!=="mouse")return;pos(e);requestAnimationFrame(function(){b.classList.add("on")})});
+    b.addEventListener("pointerleave",function(e){if(e.pointerType!=="mouse")return;pos(e);b.classList.remove("on")});
+    b.addEventListener("pointerdown",function(e){if(e.pointerType==="mouse")return;pos(e);b.classList.add("on");setTimeout(function(){b.classList.remove("on")},650)})});
+  // carrousels
+  $$(".arrows").forEach(function(a){var r=document.getElementById(a.dataset.for);
+    function up(){var b=a.querySelectorAll("button");b[0].disabled=r.scrollLeft<5;b[1].disabled=r.scrollLeft+r.clientWidth>r.scrollWidth-5}
+    $$("button",a).forEach(function(b){b.onclick=function(){if(r.stopAuto)r.stopAuto();var c=r.firstElementChild;r.scrollBy({left:+b.dataset.d*(c.getBoundingClientRect().width+parseFloat(getComputedStyle(r).gap||16)),behavior:"smooth"})}});
+    r.addEventListener("scroll",up,{passive:true});up()});
+  // glisser à la souris
+  $$(".rail,.slides").forEach(function(r){var down=false,sx,sl;r.addEventListener("mousedown",function(e){down=true;sx=e.pageX;sl=r.scrollLeft;r.style.scrollSnapType="none"});addEventListener("mouseup",function(){if(down){down=false;r.style.scrollSnapType=""}});r.addEventListener("mousemove",function(e){if(down){e.preventDefault();r.scrollLeft=sl-(e.pageX-sx)*1.5}})});
+  // défilement automatique des carrousels quand ils sont à l'écran, en pause dès que la personne y touche
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)$$(".rail,.slides").forEach(function(r){var vu=false,pause=0;
+    function pas(){var c=r.firstElementChild,w=c.getBoundingClientRect().width+parseFloat(getComputedStyle(r).columnGap||16);
+      if(r.scrollLeft+r.clientWidth>=r.scrollWidth-5)r.scrollTo({left:0,behavior:"smooth"});else r.scrollBy({left:w,behavior:"smooth"})}
+    r.stopAuto=function(){pause=Date.now()+8000};
+    ["pointerdown","touchstart","wheel"].forEach(function(ev){r.addEventListener(ev,r.stopAuto,{passive:true})});
+    r.addEventListener("mouseenter",function(){pause=Infinity});r.addEventListener("mouseleave",function(){pause=Date.now()+1500});
+    new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!vu)pause=Math.max(pause,Date.now()+1800);vu=v},{threshold:.45}).observe(r);
+    setInterval(function(){if(vu&&!document.hidden&&Date.now()>pause)pas()},3600)});
+  // centrer la 2e réalisation sur ordinateur
+  if(innerWidth>=1024){var s=$("#slides"),c2=s.children[1];s.scrollLeft=c2.offsetLeft-(s.clientWidth-c2.clientWidth)/2}
+  // accordéon
+  $$("#acc .q").forEach(function(q){$("button",q).onclick=function(){var o=q.classList.contains("on");$$("#acc .q").forEach(function(x){x.classList.remove("on");$("button",x).setAttribute("aria-expanded","false")});if(!o){q.classList.add("on");this.setAttribute("aria-expanded","true")}}});
+})();
+</script>
+</body>
+</html>
