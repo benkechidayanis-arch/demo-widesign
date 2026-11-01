@@ -1,10 +1,11 @@
 """Retouche d'une démo déjà en ligne, et copie d'aperçu pour l'application.
 
-  python3 retoucher_demo.py source <dossier> <sortie>
+  python3 retoucher_demo.py source <dossier> <sortie> [--fin AAAA-MM-JJ]
       Récupère https://demo.widesign.fr/<dossier>/, la déchiffre, retire les ajouts de proteger.py
       et remet les images en img/ : <sortie>/source.html + <sortie>/img/. Applique les retouches
       du modèle (carte resserrée). Ensuite : proteger.py <sortie>/source.html <sortie>/en-ligne demo.widesign.fr <fin>
       puis publier_cloudflare.py --demo <dossier>=<sortie>/en-ligne:<fin>.
+      --fin : nouvelle date de fin (prolongation) ; met à jour la date du pied de page et le contrôle d'expiration de la page.
 
   python3 retoucher_demo.py apercu <source.html> <sortie> [vignette.jpg]
       Copie d'aperçu pour l'application (dossier data/apercus/<dossier>/ de l'artefact) :
@@ -41,11 +42,24 @@ def retouches(h):
     return h
 
 
+MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+
+
+def changer_fin(h, fin):
+    a, m, j = (int(x) for x in fin.split('-'))
+    txt = f"{j}{'er' if j == 1 else ''} {MOIS[m - 1]} {a}"
+    h, n1 = re.subn(r'new Date\("\d{4}-\d{2}-\d{2}T23:59:59"\)', f'new Date("{fin}T23:59:59")', h)
+    h, n2 = re.subn(r"(visible jusqu'au )\d{1,2}(?:er)? [a-zéû]+ \d{4}", lambda m_: m_.group(1) + txt, h)
+    if not n2:
+        sys.exit("ÉCHEC : date du pied de page introuvable")
+    return h
+
+
 def lire(u):
     return urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'}), timeout=60).read()
 
 
-def source(dossier, out):
+def source(dossier, out, fin=None):
     base = f'https://{HOTE}/{dossier}/'
     s = lire(base).decode('utf-8')
     d = re.search(r'var d="([^"]+)"', s).group(1)
@@ -60,6 +74,8 @@ def source(dossier, out):
         open(os.path.join(out, 'img', p), 'wb').write(lire(base + 'm/' + p))
     h = re.sub(r'\bm/([0-9a-f]+\.(?:jpg|jpeg|png|svg|webp))', r'img/\1', h)
     h = retouches(h)
+    if fin:
+        h = changer_fin(h, fin)
     open(os.path.join(out, 'source.html'), 'w', encoding='utf-8').write(h)
     print('OK', dossier, len(h), 'octets', len(os.listdir(os.path.join(out, 'img'))), 'images')
 
@@ -82,8 +98,8 @@ def apercu(src, out, vignette=None):
 
 if __name__ == '__main__':
     a = sys.argv[1:]
-    if a[:1] == ['source'] and len(a) == 3:
-        source(a[1], a[2])
+    if a[:1] == ['source'] and len(a) in (3, 5) and (len(a) == 3 or a[3] == '--fin'):
+        source(a[1], a[2], a[4] if len(a) == 5 else None)
     elif a[:1] == ['apercu'] and len(a) in (3, 4):
         apercu(a[1], a[2], a[3] if len(a) == 4 else None)
     else:
