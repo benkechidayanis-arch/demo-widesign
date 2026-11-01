@@ -12,7 +12,7 @@
       <sortie>/index.html + <sortie>/img/ (seulement les images utilisées) + <sortie>/v.jpg (vignette 480 px).
       Les avis Google n'y chargent pas (règles de l'artefact) : la section se retire d'elle-même.
 """
-import base64, hashlib, io, os, re, shutil, sys, urllib.request
+import contact_widesign, base64, hashlib, io, os, re, shutil, sys, urllib.request
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 HOTE = 'demo.widesign.fr'
@@ -42,6 +42,10 @@ def police(h):
 def retouches(h):
     """Retouches du modèle v9 appliquées aux démos déjà assemblées (sans effet si déjà présentes)."""
     h = police(h)
+    nom = contact_widesign.nom_depuis_page(h)
+    if not nom:
+        sys.exit("ÉCHEC : nom de l'entreprise introuvable dans le pied de page")
+    h = contact_widesign.inserer(h, nom)
     if 'class="mapz"' not in h:
         h, n = re.subn(r'(<svg class="carte".*?</svg>)\s*(<span class="lab"[^>]*>.*?</span>)',
                        r'<div class="mapz">\1\2</div>', h, count=1, flags=re.S)

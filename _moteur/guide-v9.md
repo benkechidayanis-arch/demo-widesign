@@ -62,3 +62,7 @@ Captures Playwright pleine page en mobile 390 x 844 (is_mobile) et en ordinateur
 - chaque photo illustre sa section, aucune femme, aucune photo répétée hors de la bande qui défile ;
 - contraste lisible partout, aucune section vide, aucun texte d'Oriol.
 Corrige et recapture, deux fois au plus. Après la mise en ligne, capture « <url>?moi » en mobile, descends jusqu'à la section avis et vérifie qu'elle affiche de vrais avis ou qu'elle a disparu proprement. Le réseau des sessions cloud bloque souvent l'appel à places.googleapis.com : une section absente sur ta capture n'est alors pas un défaut (la clé a été vérifiée dans un vrai navigateur sur demo.widesign.fr). Seule une section visible mais vide ou cassée est un défaut.
+
+
+## Contact Widesign
+Le bandeau « Écrivez-moi » (pastille, fiche mail et WhatsApp, bande en bas de page) est ajouté automatiquement par assembler_v9.py avec le nom de config.json : ne l'écris pas dans la page.

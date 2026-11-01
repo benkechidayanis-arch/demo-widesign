@@ -89,6 +89,9 @@ else:
     s = re.sub(r'<section class="lt sec" id="avis".*?</section>\s*', '', s, flags=re.S)
     s = s.replace('AVIS_CLE', '').replace('PLACE_ID', '')
 
+import contact_widesign
+s = contact_widesign.inserer(s, nom)
+
 err = []
 if '—' in s: err.append('tiret cadratin')
 for k in ['CHK', 'TICK', 'PICTO_', 'LOGO_', 'STARS', 'ARW_', 'CHEV', 'CITYROWS', 'CITIES', 'CLOCK', 'CARTE_SVG', 'ETOILE_', 'AVIS_CLE', 'PLACE_ID']:
