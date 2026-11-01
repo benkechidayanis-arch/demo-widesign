@@ -39,6 +39,9 @@ def police(h):
     return h.replace('"Bricolage Grotesque"', '"Archivo"').replace("'Bricolage Grotesque'", "'Archivo'")
 
 
+BUREAU_CSS = '<style id="v9-bureau">@media(min-width:1024px){.h2[style*="max-width"]{max-width:18ch!important}.h2{line-height:.86}.stk{height:min(580px,70vh)}.stp .ph{aspect-ratio:4/3}.stp .tx{padding:22px 22px 24px}.stp h3{font-size:23px}}</style>'
+
+
 def retouches(h):
     """Retouches du modèle v9 appliquées aux démos déjà assemblées (sans effet si déjà présentes)."""
     h = police(h)
@@ -46,6 +49,9 @@ def retouches(h):
     if not nom:
         sys.exit("ÉCHEC : nom de l'entreprise introuvable dans le pied de page")
     h = contact_widesign.inserer(h, nom)
+    if 'steps2' in h and 'id="v9-bureau"' not in h:
+        i = h.find('</head>')
+        h = h[:i] + BUREAU_CSS + h[i:]
     if 'class="mapz"' not in h:
         h, n = re.subn(r'(<svg class="carte".*?</svg>)\s*(<span class="lab"[^>]*>.*?</span>)',
                        r'<div class="mapz">\1\2</div>', h, count=1, flags=re.S)

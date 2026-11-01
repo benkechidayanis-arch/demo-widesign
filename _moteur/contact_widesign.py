@@ -14,12 +14,12 @@ MAIL = ('yanis', 'widesign.fr')
 CSS = """<style>
 .wsx-p,.wsx-f,.wsx-b{font-family:inherit;-webkit-font-smoothing:antialiased;box-sizing:border-box}
 .wsx-p *,.wsx-f *,.wsx-b *{box-sizing:border-box}
-.wsx-p{position:fixed;z-index:95;left:50%;bottom:88px;transform:translate(-50%,24px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:9px;padding:7px 15px 7px 7px;border-radius:999px;background:rgba(17,17,16,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;font-size:13.5px;font-weight:500;line-height:1;white-space:nowrap;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px rgba(0,0,0,.25);cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
-.wsx-p.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.wsx-p{position:fixed;z-index:95;left:50%;bottom:88px;transform:translate(-50%,24px);opacity:0;visibility:hidden;pointer-events:none;display:flex;align-items:center;gap:9px;padding:7px 15px 7px 7px;border-radius:999px;background:rgba(17,17,16,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;font-size:13.5px;font-weight:500;line-height:1;white-space:nowrap;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px rgba(0,0,0,.25);cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
+.wsx-p.on{transform:translate(-50%,0);opacity:1;visibility:visible;pointer-events:auto}
 .wsx-p .wsx-w{flex:none;width:26px;height:26px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:-.04em}
 .wsx-p .wsx-d{width:7px;height:7px;border-radius:50%;background:#3DDC84;box-shadow:0 0 0 3px rgba(61,220,132,.22);margin-left:2px}
-.wsx-f{position:fixed;z-index:96;left:12px;right:12px;bottom:12px;max-width:400px;margin:0 auto;padding:22px 20px 18px;border-radius:20px;background:#111110;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,.4);transform:translateY(calc(100% + 30px));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.wsx-f.on{transform:none}
+.wsx-f{position:fixed;z-index:96;left:12px;right:12px;bottom:12px;max-width:400px;margin:0 auto;padding:22px 20px 18px;border-radius:20px;background:#111110;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,.4);transform:translateY(calc(100% + 30px));visibility:hidden;transition:transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s .5s}
+.wsx-f.on{transform:none;visibility:visible;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .wsx-f .wsx-x{position:absolute;top:10px;right:10px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:20px;line-height:1;cursor:pointer}
 .wsx-f p{margin:0 36px 4px 0;font-size:17px;font-weight:600;line-height:1.3;letter-spacing:-.01em}
 .wsx-f small{display:block;margin:0 0 16px;font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.62)}
