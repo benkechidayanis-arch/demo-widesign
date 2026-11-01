@@ -565,7 +565,7 @@ footer{background:var(--b900);padding:10px 0 110px}
   .callbar{display:none}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}body:before{display:none}.wi,.fx,.zoom>img{transform:none!important;opacity:1!important}}
-</style>
+.mapc .mapv{aspect-ratio:4/3;overflow:hidden}.mapc .mapz{position:absolute;left:-15%;width:130%;aspect-ratio:1/1;top:50%;transform:translateY(-50%)}.mapc .mapz .carte{position:absolute;inset:0}@media(min-width:900px){.mapc .mapv{aspect-ratio:16/11}.mapc .mapz{left:-10%;width:120%}}</style>
 </head>
 <body>
 
@@ -698,7 +698,7 @@ footer{background:var(--b900);padding:10px 0 110px}
 <section class="lt cr sec" id="zone">
   <div class="c zg">
     <div class="kick"><span class="pill">Zone d'intervention</span><h2 class="h2 split" style="max-width:13ch">À Saint-Étienne, dans la Loire <em>et autour de Lyon</em></h2><p class="lead">Des écoles et hôpitaux de la Loire aux bâtiments industriels de la région lyonnaise.</p></div>
-    <div class="mapc fx" id="carte"><div class="mapv">CARTE_SVG<span class="lab">Saint-Étienne</span><span class="leg">Siège rue de la Tour</span></div><div class="vrows" aria-label="Villes d'intervention">CITYROWS</div></div>
+    <div class="mapc fx" id="carte"><div class="mapv"><div class="mapz">CARTE_SVG<span class="lab">Saint-Étienne</span></div><span class="leg">Siège rue de la Tour</span></div><div class="vrows" aria-label="Villes d'intervention">CITYROWS</div></div>
   </div>
 </section>
 
@@ -837,5 +837,5 @@ footer{background:var(--b900);padding:10px 0 110px}
  sc.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(k)+"&v=weekly&loading=async&language=fr&libraries=places&callback=__avisGo";document.head.appendChild(sc);
 })();
 </script>
-</body>
+<script>(function(){var v=document.querySelector(".mapc .mapv"),l=v&&v.querySelector(".lab");if(!l)return;var L0=parseFloat(l.style.left),T0=parseFloat(l.style.top);function f(){l.style.left=L0+"%";l.style.top=T0+"%";l.style.marginLeft="";var a=v.getBoundingClientRect(),b=l.getBoundingClientRect(),w=b.width;if(b.right<=a.right-12)return;l.style.left=(L0-8)+"%";l.style.marginLeft=(-w)+"px";var c=l.getBoundingClientRect();if(c.left>=a.left+12)return;l.style.left=(L0-4)+"%";l.style.top=(T0+10)+"%";l.style.marginLeft=(-w/2)+"px";c=l.getBoundingClientRect();if(c.right>a.right-12)l.style.marginLeft=(-w/2-(c.right-a.right+12))+"px";else if(c.left<a.left+12)l.style.marginLeft=(-w/2+(a.left+12-c.left))+"px"}f();addEventListener("resize",f)})();</script></body>
 </html>

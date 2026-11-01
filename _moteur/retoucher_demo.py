@@ -1,0 +1,90 @@
+"""Retouche d'une démo déjà en ligne, et copie d'aperçu pour l'application.
+
+  python3 retoucher_demo.py source <dossier> <sortie>
+      Récupère https://demo.widesign.fr/<dossier>/, la déchiffre, retire les ajouts de proteger.py
+      et remet les images en img/ : <sortie>/source.html + <sortie>/img/. Applique les retouches
+      du modèle (carte resserrée). Ensuite : proteger.py <sortie>/source.html <sortie>/en-ligne demo.widesign.fr <fin>
+      puis publier_cloudflare.py --demo <dossier>=<sortie>/en-ligne:<fin>.
+
+  python3 retoucher_demo.py apercu <source.html> <sortie> [vignette.jpg]
+      Copie d'aperçu pour l'application (dossier data/apercus/<dossier>/ de l'artefact) :
+      <sortie>/index.html + <sortie>/img/ (seulement les images utilisées) + <sortie>/v.jpg (vignette 480 px).
+      Les avis Google n'y chargent pas (règles de l'artefact) : la section se retire d'elle-même.
+"""
+import base64, hashlib, io, os, re, shutil, sys, urllib.request
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+HOTE = 'demo.widesign.fr'
+
+CARTE_CSS = ('.mapc .mapv{aspect-ratio:4/3;overflow:hidden}'
+             '.mapc .mapz{position:absolute;left:-15%;width:130%;aspect-ratio:1/1;top:50%;transform:translateY(-50%)}'
+             '.mapc .mapz .carte{position:absolute;inset:0}'
+             '@media(min-width:900px){.mapc .mapv{aspect-ratio:16/11}.mapc .mapz{left:-10%;width:120%}}')
+CARTE_JS = ('<script>(function(){var v=document.querySelector(".mapc .mapv"),l=v&&v.querySelector(".lab");if(!l)return;'
+            'var L0=parseFloat(l.style.left),T0=parseFloat(l.style.top);function f(){l.style.left=L0+"%";l.style.top=T0+"%";l.style.marginLeft="";'
+            'var a=v.getBoundingClientRect(),b=l.getBoundingClientRect(),w=b.width;if(b.right<=a.right-12)return;'
+            'l.style.left=(L0-8)+"%";l.style.marginLeft=(-w)+"px";var c=l.getBoundingClientRect();if(c.left>=a.left+12)return;'
+            'l.style.left=(L0-4)+"%";l.style.top=(T0+10)+"%";l.style.marginLeft=(-w/2)+"px";c=l.getBoundingClientRect();'
+            'if(c.right>a.right-12)l.style.marginLeft=(-w/2-(c.right-a.right+12))+"px";else if(c.left<a.left+12)l.style.marginLeft=(-w/2+(a.left+12-c.left))+"px"}'
+            'f();addEventListener("resize",f)})();</script>')
+
+
+def retouches(h):
+    """Retouches du modèle v9 appliquées aux démos déjà assemblées (sans effet si déjà présentes)."""
+    if 'class="mapz"' not in h:
+        h, n = re.subn(r'(<svg class="carte".*?</svg>)\s*(<span class="lab"[^>]*>.*?</span>)',
+                       r'<div class="mapz">\1\2</div>', h, count=1, flags=re.S)
+        if n:
+            i = h.find('</style>')
+            h = h[:i] + CARTE_CSS + h[i:]
+            h = h.replace('</body>', CARTE_JS + '</body>', 1)
+    return h
+
+
+def lire(u):
+    return urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'}), timeout=60).read()
+
+
+def source(dossier, out):
+    base = f'https://{HOTE}/{dossier}/'
+    s = lire(base).decode('utf-8')
+    d = re.search(r'var d="([^"]+)"', s).group(1)
+    m = re.search(r',v="([^"]+)",g="([^"]+)",f=(\d+)', s)
+    cle = hashlib.sha256(HOTE.encode() + base64.b64decode(m.group(2))).digest()
+    h = AESGCM(cle).decrypt(base64.b64decode(m.group(1)), base64.b64decode(d), None).decode('utf-8')
+    # retire les ajouts de proteger.py (ils seront remis à la prochaine protection)
+    h = re.sub(r'<style>html,body\{-webkit-user-select:none.*?</script>', '', h, count=1, flags=re.S)
+    h = re.sub(r'<script>\(function\(\)\{try\{if\(/\[\?&\]moi.*?</script>', '', h, count=1, flags=re.S)
+    os.makedirs(os.path.join(out, 'img'), exist_ok=True)
+    for p in sorted(set(re.findall(r'm/([0-9a-f]+\.(?:jpg|jpeg|png|svg|webp))', h))):
+        open(os.path.join(out, 'img', p), 'wb').write(lire(base + 'm/' + p))
+    h = re.sub(r'\bm/([0-9a-f]+\.(?:jpg|jpeg|png|svg|webp))', r'img/\1', h)
+    h = retouches(h)
+    open(os.path.join(out, 'source.html'), 'w', encoding='utf-8').write(h)
+    print('OK', dossier, len(h), 'octets', len(os.listdir(os.path.join(out, 'img'))), 'images')
+
+
+def apercu(src, out, vignette=None):
+    base = os.path.dirname(os.path.abspath(src))
+    h = retouches(open(src, encoding='utf-8').read())
+    os.makedirs(os.path.join(out, 'img'), exist_ok=True)
+    for p in sorted(set(re.findall(r'img/[A-Za-z0-9_.-]+\.(?:jpg|jpeg|png|svg|webp)', h))):
+        shutil.copy(os.path.join(base, p), os.path.join(out, p))
+    open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(h)
+    if vignette:
+        from PIL import Image
+        data = lire(vignette) if vignette.startswith('http') else open(vignette, 'rb').read()
+        im = Image.open(io.BytesIO(data)).convert('RGB')
+        im.thumbnail((480, 480))
+        im.save(os.path.join(out, 'v.jpg'), quality=80, optimize=True)
+    print('OK apercu', out)
+
+
+if __name__ == '__main__':
+    a = sys.argv[1:]
+    if a[:1] == ['source'] and len(a) == 3:
+        source(a[1], a[2])
+    elif a[:1] == ['apercu'] and len(a) in (3, 4):
+        apercu(a[1], a[2], a[3] if len(a) == 4 else None)
+    else:
+        sys.exit(__doc__)
