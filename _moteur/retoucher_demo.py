@@ -30,8 +30,18 @@ CARTE_JS = ('<script>(function(){var v=document.querySelector(".mapc .mapv"),l=v
             'f();addEventListener("resize",f)})();</script>')
 
 
+POLICE = 'Archivo:wght@400;500;600;700;800'
+
+
+def police(h):
+    """Police du modèle : Archivo (remplace Bricolage Grotesque)."""
+    h = re.sub(r'family=Bricolage\+Grotesque[^"&]*', 'family=' + POLICE, h)
+    return h.replace('"Bricolage Grotesque"', '"Archivo"').replace("'Bricolage Grotesque'", "'Archivo'")
+
+
 def retouches(h):
     """Retouches du modèle v9 appliquées aux démos déjà assemblées (sans effet si déjà présentes)."""
+    h = police(h)
     if 'class="mapz"' not in h:
         h, n = re.subn(r'(<svg class="carte".*?</svg>)\s*(<span class="lab"[^>]*>.*?</span>)',
                        r'<div class="mapz">\1\2</div>', h, count=1, flags=re.S)

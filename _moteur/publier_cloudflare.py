@@ -170,6 +170,8 @@ json.dump({'genere_le': datetime.datetime.now().isoformat(timespec='seconds'), '
           open(os.path.join(SITE, '_widesign', 'fichiers.json'), 'w'), ensure_ascii=False, indent=1)
 with open(os.path.join(SITE, '_headers'), 'w') as f:
     f.write('/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n')
+    # images aux noms aléatoires : jamais modifiées, le navigateur peut les garder un an
+    f.write('/*/m/*\n  Cache-Control: public, max-age=31536000, immutable\n/g/*\n  Cache-Control: public, max-age=31536000, immutable\n')
 taille = sum(os.path.getsize(os.path.join(r, f)) for r, _, fs in os.walk(SITE) for f in fs)
 if essai:
     print(f'ESSAI : {len(fichiers)} fichiers, {len(dossiers)} démos ({", ".join(sorted(dossiers))}), {taille // 1024} Ko dans {SITE}')
