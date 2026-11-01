@@ -21,26 +21,30 @@ VIEW_W, VIEW_H = 390, 747      # fenêtre mobile capturée (même rapport que l'
 ARRETS = [0, 760, 1520]        # positions de défilement (3 écrans : le poids reste sous 900 Ko)
 PAUSE, PAUSE_1 = 180, 240      # durée de chaque arrêt, en centièmes de seconde (le premier plan reste plus longtemps)
 PAS, PAS_D = 8, 12             # défilement : 8 images de 12 centièmes, soit environ 1 s par écran
+# Mode moments forts : si la démo marque ses sections avec data-gif, le GIF saute de moment en moment
+# (5 arrêts au plus, transition rapide de 0,4 s, arrêt de 1,7 s) et le site actuel avance à la même proportion de sa hauteur.
+M_PAS, M_PAS_D, M_PAUSE = 4, 13, 170
 TMP = tempfile.mkdtemp(prefix='gifaa-')
 
 def ease(t):
     return 4 * t * t * t if t < .5 else 1 - (-2 * t + 2) ** 3 / 2
 
-def positions(arrets, h):
+def positions(arrets, h, pas=PAS, pas_d=PAS_D, pause=PAUSE):
     """Liste de (position de défilement, durée d'affichage en centièmes)."""
     arrets = [min(a, max(0, h - VIEW_H)) for a in arrets]
     out = []
     for i, a in enumerate(arrets):
-        out.append((a, PAUSE_1 if i == 0 else PAUSE))
+        out.append((a, PAUSE_1 if i == 0 else (200 if i == len(arrets) - 1 and pause != PAUSE else pause)))
         if i < len(arrets) - 1:
             b = arrets[i + 1]
-            out += [(round(a + (b - a) * ease(k / PAS)), PAS_D) for k in range(1, PAS)]
+            out += [(round(a + (b - a) * ease(k / pas)), pas_d) for k in range(1, pas)]
     return out
 
 UA = ('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 '
       '(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1')
 
-def capturer(pw, url, dossier):
+def capturer(pw, url, dossier, ratios=None):
+    """Capture les images du défilement. Renvoie (positions, ratios des moments forts ou None)."""
     os.makedirs(dossier, exist_ok=True)
     proxy = {'server': os.environ['HTTPS_PROXY']} if os.environ.get('HTTPS_PROXY') and url.startswith('http') else None
     b = pw.chromium.launch(proxy=proxy)
@@ -61,13 +65,24 @@ def capturer(pw, url, dossier):
     for y in range(0, min(h, 4200), 400):
         p.evaluate(f'scrollTo(0,{y})'); p.wait_for_timeout(120)
     p.evaluate('scrollTo(0,0)'); p.wait_for_timeout(700)
-    pos = positions(ARRETS, h)
+    moments = None
+    if ratios is None:
+        tops = p.evaluate("""()=>[...document.querySelectorAll('[data-gif]')].slice(0,4).map(e=>Math.round(e.getBoundingClientRect().top+scrollY))""")
+        if tops:
+            moments = [0] + [max(0, t - 70) for t in tops]
+    else:
+        moments = [0] + [round(r * max(0, h - VIEW_H)) for r in ratios]
+    if moments:
+        pos = positions(moments, h, M_PAS, M_PAS_D, M_PAUSE)
+    else:
+        pos = positions(ARRETS, h)
     for i, (y, _) in enumerate(pos):
         p.evaluate(f"window.scrollTo({{top:{y},behavior:'instant'}})")
         p.wait_for_timeout(50)
         p.screenshot(path=f'{dossier}/{i:03d}.png')
     b.close()
-    return pos
+    rat = [min(1, m / max(1, h - VIEW_H)) for m in moments[1:]] if (moments and ratios is None) else None
+    return pos, rat
 
 def police(taille, gras=False):
     for f in (['/usr/share/fonts/opentype/inter/Inter-SemiBold.otf', '/usr/share/fonts/opentype/inter/Inter-Bold.otf'] if gras else
@@ -175,8 +190,8 @@ def encoder(durees):
     return os.path.getsize(sortie)
 
 with sync_playwright() as pw:
-    pa = capturer(pw, site, f'{TMP}/a')
-    pb = capturer(pw, demo, f'{TMP}/b')
+    pb, rat = capturer(pw, demo, f'{TMP}/b')
+    pa, _ = capturer(pw, site, f'{TMP}/a', rat)
 durees = composer(pa, pb)
 taille = encoder(durees)
 n = len(durees)
