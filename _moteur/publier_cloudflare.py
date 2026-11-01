@@ -13,13 +13,17 @@ Usage :
   --demo : remplace (ou crée) le dossier public de la démo, avec sa date de fin.
   --fichier : fichier isolé (GIF, image du GIF, vignette) : g/<hex>.gif=/tmp/demos/x/gif.gif
   --fin : date de fin d'une démo déjà en ligne (utile pour l'amorce).
-  --essai : prépare le site dans /tmp/site-demos sans rien envoyer.
-Affiche « OK » avec l'adresse pages.dev et l'état du domaine, ou « ÉCHEC : cause ». Les clés ne sont jamais affichées."""
+  --essai : prépare le site dans /tmp/racine-demos/site sans rien envoyer.
+Le site part avec une petite fonction /_v qui compte les visites de chaque démo dans le stockage Cloudflare « demo-widesign-vues »
+(créé au besoin ; il faut l'autorisation « Workers KV Storage : Edit » sur la clé, sinon les démos partent sans compteur et la sortie le dit).
+Affiche « OK » avec l'adresse pages.dev, l'état du domaine et du compteur, ou « ÉCHEC : cause ». Les clés ne sont jamais affichées."""
 import datetime, json, os, shutil, subprocess, sys, urllib.request, urllib.error
 
 PROJET, DOMAINE, BRANCHE = 'demo-widesign', 'demo.widesign.fr', 'main'
 DEPOT = 'https://github.com/benkechidayanis-arch/demo-widesign.git'
-SITE = '/tmp/site-demos'
+RACINE = '/tmp/racine-demos'
+SITE = RACINE + '/site'
+KV_TITRE = 'demo-widesign-vues'
 args = sys.argv[1:]
 essai = '--essai' in args
 amorce = '--amorce-github' in args
@@ -54,8 +58,36 @@ def telecharger(url, dest):
     with urllib.request.urlopen(req, timeout=60) as r, open(dest, 'wb') as f:
         shutil.copyfileobj(r, f)
 
+FONCTION_VUES = r"""const ROBOTS=/bot|crawl|spider|slurp|preview|scan|fetch|curl|wget|python|headless|monitor|lighthouse|facebookexternalhit|linkexpand|safelinks|proofpoint|mimecast|barracuda|bitdefender/i;
+export async function onRequestPost({request, env}) {
+  const u = new URL(request.url), d = (u.searchParams.get('d') || '').toLowerCase();
+  const ua = request.headers.get('user-agent') || '';
+  if (!env.VUES || !/^[a-z0-9-]{3,80}$/.test(d) || ROBOTS.test(ua)) return new Response(null, {status: 204});
+  const k = 'v:' + d, now = new Date().toISOString(), s = Math.min(36000, parseInt(u.searchParams.get('s') || '0', 10) || 0);
+  let o = {}; try { o = JSON.parse(await env.VUES.get(k) || '{}') } catch (e) {}
+  if (u.searchParams.get('f') === '1') { if (!o.n) return new Response(null, {status: 204}); o.duree_max = Math.max(o.duree_max || 0, s) }
+  else { o.n = (o.n || 0) + 1; o.premiere = o.premiere || now; o.derniere = now;
+    const app = /iphone|ipad|android|mobile/i.test(ua) ? 'mobile' : 'ordinateur'; o.appareils = o.appareils || {}; o.appareils[app] = (o.appareils[app] || 0) + 1 }
+  await env.VUES.put(k, JSON.stringify(o));
+  return new Response(null, {status: 204, headers: {'Cache-Control': 'no-store'}});
+}
+"""
+
+def stockage_vues():
+    """Identifiant du stockage des visites, créé au besoin. None si la clé n'a pas l'autorisation."""
+    r = api('GET', '/storage/kv/namespaces?per_page=100')
+    if not r.get('success'):
+        return None, 'compteur inactif (autorisation Workers KV absente sur la clé)'
+    for n in r.get('result') or []:
+        if n.get('title') == KV_TITRE:
+            return n['id'], 'compteur actif'
+    c = api('POST', '/storage/kv/namespaces', {'title': KV_TITRE})
+    if c.get('success'):
+        return c['result']['id'], 'compteur créé'
+    return None, 'compteur inactif (création refusée : ' + json.dumps(c)[:160] + ')'
+
 aujourd = datetime.date.today().isoformat()
-shutil.rmtree(SITE, ignore_errors=True)
+shutil.rmtree(RACINE, ignore_errors=True)
 os.makedirs(SITE)
 fins = {}                     # dossier de démo -> date de fin
 for v in valeurs('--fin'):
@@ -143,15 +175,23 @@ if essai:
     print(f'ESSAI : {len(fichiers)} fichiers, {len(dossiers)} démos ({", ".join(sorted(dossiers))}), {taille // 1024} Ko dans {SITE}')
     sys.exit(0)
 
-# 5. Envoi
+# 5. Compteur de visites (fonction /_v + stockage)
+kv_id, etat_vues = stockage_vues()
+if kv_id:
+    os.makedirs(os.path.join(RACINE, 'functions'), exist_ok=True)
+    open(os.path.join(RACINE, 'functions', '_v.js'), 'w').write(FONCTION_VUES)
+    open(os.path.join(RACINE, 'wrangler.toml'), 'w').write(
+        f'name = "{PROJET}"\npages_build_output_dir = "./site"\ncompatibility_date = "2025-09-01"\n\n[[kv_namespaces]]\nbinding = "VUES"\nid = "{kv_id}"\n')
+
+# 6. Envoi
 env = dict(os.environ, CLOUDFLARE_API_TOKEN=tok, CLOUDFLARE_ACCOUNT_ID=acc, WRANGLER_SEND_METRICS='false', CI='1')
 r = subprocess.run(['npx', '--yes', 'wrangler@4', 'pages', 'deploy', SITE, '--project-name', PROJET, '--branch', BRANCHE, '--commit-dirty=true'],
-                   capture_output=True, text=True, env=env, timeout=900)
+                   capture_output=True, text=True, env=env, timeout=900, cwd=RACINE)
 sortie = (r.stdout + r.stderr).replace(tok, '***')
 if r.returncode:
     sys.exit('ÉCHEC : envoi wrangler : ' + sortie[-600:])
 
-# 6. Domaine demo.widesign.fr rattaché au projet
+# 7. Domaine demo.widesign.fr rattaché au projet
 dom = api('GET', f'/pages/projects/{PROJET}/domains')
 noms = [x.get('name') for x in (dom.get('result') or [])]
 if DOMAINE not in noms:
@@ -159,4 +199,4 @@ if DOMAINE not in noms:
     etat = 'ajouté' if dom2.get('success') else 'non ajouté : ' + json.dumps(dom2)[:300]
 else:
     etat = next((x.get('status') for x in dom['result'] if x.get('name') == DOMAINE), 'inconnu')
-print(f'OK : {len(fichiers)} fichiers, {len(dossiers)} démos en ligne, adresse https://{sous_domaine} , domaine {DOMAINE} : {etat}')
+print(f'OK : {len(fichiers)} fichiers, {len(dossiers)} démos en ligne, adresse https://{sous_domaine} , domaine {DOMAINE} : {etat} , {etat_vues}')
