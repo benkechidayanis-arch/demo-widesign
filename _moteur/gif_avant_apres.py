@@ -57,9 +57,26 @@ def capturer(pw, url, dossier, ratios=None):
         pass
     p.wait_for_timeout(2500)
     # bandeaux cookies : on refuse ou on ferme, puis on force l'affichage des blocs animés
-    p.evaluate("""()=>{const m=/^(tout refuser|refuser|continuer sans accepter|refuser et fermer|fermer|j'ai compris|ok)$/i;
-      const b=[...document.querySelectorAll('button,a,[role=button]')].filter(x=>m.test((x.innerText||'').trim()));if(b[0])b[0].click();
-      document.querySelectorAll('.rv').forEach(e=>e.classList.add('on'))}""")
+    # la fenêtre de consentement est souvent dans une iframe (Didomi, Duda, Solocal) : on cherche dans chaque cadre
+    for f in p.frames:
+        try:
+            if f.evaluate("""()=>{const m=/^(tout refuser|refuser tout|refuser|continuer sans accepter|refuser et fermer|fermer|j'ai compris|ok)$/i;
+              const b=[...document.querySelectorAll('button,a,[role=button]')].filter(x=>m.test((x.innerText||'').trim()));if(b[0]){b[0].click();return true}return false}"""):
+                break
+        except Exception:
+            pass
+    # certains sites rechargent la page après le refus : on attend qu'elle soit de nouveau prête
+    for _ in range(3):
+        try:
+            p.wait_for_timeout(1200)
+            p.wait_for_load_state('networkidle', timeout=15000)
+        except Exception:
+            pass
+        try:
+            p.evaluate("()=>document.querySelectorAll('.rv').forEach(e=>e.classList.add('on'))")
+            break
+        except Exception:
+            continue
     p.wait_for_timeout(800)
     h = p.evaluate('document.documentElement.scrollHeight')
     for y in range(0, min(h, 16000), 350):
