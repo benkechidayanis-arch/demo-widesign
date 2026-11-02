@@ -200,17 +200,34 @@ def cmd_demos(d, maxi):
         return {'lancer': [], 'creer': [], 'raison': 'plafond de démos du jour atteint'}
     deja = {x['id'] for x in demos}
     ignorer = set(plan.get('scans_ignores', []))
-    cands = []
+    fichiers = []
     for s in sorted(scans, key=lambda x: x.get('cree_le') or ''):
-        if s['id'] in ignorer or s.get('statut') != 'termine' or scan_occupe(s):
-            continue
         f = lire(os.path.join(d, 'scan-' + s['id'] + '.json'))
-        if not f:
+        if f:
+            fichiers.append((s, f))
+    # doublons : même fiche Google, même mail ou même SIREN qu'une démo déjà faite
+    mails, sirens = set(), set()
+    for _, f in fichiers:
+        for e in f.get('entreprises', []):
+            if e['id'] in deja:
+                if e.get('mail'):
+                    mails.add(e['mail'].strip().lower())
+                if (e.get('sirene') or {}).get('siren'):
+                    sirens.add(e['sirene']['siren'])
+    cands = []
+    for s, f in fichiers:
+        if s['id'] in ignorer or s.get('statut') != 'termine' or scan_occupe(s):
             continue
         for e in f.get('entreprises', []):
             if e['id'] in deja or not e.get('mail') or e.get('ecarte') or e.get('attente_mail') or e.get('attente_avis'):
                 continue
+            m, sn = e['mail'].strip().lower(), (e.get('sirene') or {}).get('siren')
+            if m in mails or (sn and sn in sirens):
+                continue
             deja.add(e['id'])
+            mails.add(m)
+            if sn:
+                sirens.add(sn)
             cands.append((0 if e.get('site') else 1, -(e.get('score') or 0), e, s))
     cands.sort(key=lambda c: (c[0], c[1]))
     exp = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
