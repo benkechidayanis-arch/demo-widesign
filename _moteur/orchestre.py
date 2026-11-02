@@ -189,6 +189,9 @@ def cmd_demos(d, maxi):
         return {'lancer': [], 'creer': [], 'raison': 'prospection automatique en pause'}
     if any(x.get('statut') == 'en_cours' for x in demos):
         return {'lancer': [], 'creer': [], 'raison': 'une fabrication de démos est en cours'}
+    limite = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=2)
+    if any(x.get('statut') == 'pret' and not x.get('url') and (quand(x.get('pret_le')) or limite) > limite for x in demos):
+        return {'lancer': [], 'creer': [], 'raison': 'mise en ligne de démos en cours'}
     attente = [x['id'] for x in demos if x.get('statut') == 'demande']
     if attente:
         return {'lancer': attente[:maxi], 'creer': [], 'raison': str(len(attente)) + ' démos en file'}
