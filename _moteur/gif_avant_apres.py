@@ -62,9 +62,10 @@ def capturer(pw, url, dossier, ratios=None):
       document.querySelectorAll('.rv').forEach(e=>e.classList.add('on'))}""")
     p.wait_for_timeout(800)
     h = p.evaluate('document.documentElement.scrollHeight')
-    for y in range(0, min(h, 16000), 450):
-        p.evaluate(f'scrollTo(0,{y})'); p.wait_for_timeout(120)
-    p.evaluate('scrollTo(0,0)'); p.wait_for_timeout(700)
+    for y in range(0, min(h, 16000), 350):
+        p.evaluate(f'scrollTo(0,{y})'); p.wait_for_timeout(300)
+    p.evaluate('scrollTo(0,document.documentElement.scrollHeight)'); p.wait_for_timeout(1500)
+    p.evaluate('scrollTo(0,0)'); p.wait_for_timeout(900)
     moments = None
     if ratios is None:
         tops = p.evaluate("""()=>[...document.querySelectorAll('[data-gif]')].slice(0,4).map(e=>Math.round(e.getBoundingClientRect().top+scrollY))""")
@@ -78,7 +79,7 @@ def capturer(pw, url, dossier, ratios=None):
         pos = positions(ARRETS, h)
     for i, (y, _) in enumerate(pos):
         p.evaluate(f"window.scrollTo({{top:{y},behavior:'instant'}})")
-        p.wait_for_timeout(50)
+        p.wait_for_timeout(250)
         p.screenshot(path=f'{dossier}/{i:03d}.png')
     b.close()
     rat = [min(1, m / max(1, h - VIEW_H)) for m in moments[1:]] if (moments and ratios is None) else None
@@ -153,6 +154,13 @@ def composer(pos_a, pos_b):
         base.paste((38, 30, 24), (xs[k] * S - M, y0 * S - M), om)
         base.paste(cadre, (xs[k] * S, y0 * S), cadre)
     n = min(len(pos_a), len(pos_b))
+    # écran vide ou noir sur le site actuel (images pas encore chargées) : le GIF s'arrête juste avant
+    from PIL import ImageStat
+    for i in range(1, n):
+        g = Image.open(f'{TMP}/a/{i:03d}.png').convert('L').resize((60, 115))
+        if ImageStat.Stat(g).stddev[0] < 10:
+            n = i
+            break
     for i in range(n):
         im = base.copy()
         for k, dos in enumerate(('a', 'b')):
@@ -168,7 +176,10 @@ def composer(pos_a, pos_b):
             de.text((20 * S, 10 * S), '9:41', fill=(255, 255, 255) if clair else (20, 20, 22), font=fh)
             im.paste(ecran, ((xs[k] + B) * S, (y0 + B) * S), masque)
         im.resize((W, H), Image.LANCZOS).save(f'{TMP}/c{i:03d}.png')
-    return [d for _, d in pos_a[:n]]
+    durees = [d for _, d in pos_a[:n]]
+    if n < min(len(pos_a), len(pos_b)) and durees:
+        durees[-1] = max(durees[-1], 200)
+    return durees
 
 def encoder(durees):
     brut = f'{TMP}/brut.gif'
