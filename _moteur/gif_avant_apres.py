@@ -2,7 +2,7 @@
 le site actuel du prospect à gauche, la démo Widesign à droite, qui défilent ensemble au rythme de lecture\n(arrêt de 1,8 s sur chaque écran, défilement d'environ 1 s).
 Usage : python3 gif_avant_apres.py <url_site_actuel> <chemin_ou_url_demo> <sortie.gif> "<légende ou vide>" [couleur_accent]
 Le premier plan du GIF montre les deux pages d'accueil (c'est ce que voit Outlook ordinateur).
-Vise moins de 900 Ko (256 couleurs : en dessous, les photos du site actuel se dégradent et le comparatif devient injuste) ; utilise ffmpeg et gifsicle s'ils sont présents."""
+Vise moins de 700 Ko sans perte visible (256 couleurs gardées, tramage fin, compression gifsicle) ; gifsicle est installé avec npm s'il manque."""
 import os, subprocess, sys, shutil, tempfile, glob
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from playwright.sync_api import sync_playwright
@@ -177,15 +177,22 @@ def encoder(durees):
             f.write(f"file 'c{i:03d}.png'\nduration {d / 100:.2f}\n")
         f.write(f"file 'c{len(durees) - 1:03d}.png'\n")
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', f'{TMP}/liste.txt',
-                    '-vf', 'split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
+                    '-vf', 'split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle',
                     '-fps_mode', 'vfr', '-loop', '0', brut], check=True)
-    gs = shutil.which('gifsicle') or next(iter(glob.glob('/tmp/gs/node_modules/gifsicle/vendor/gifsicle')), None)
+    trouver = lambda: shutil.which('gifsicle') or next(iter(glob.glob('/tmp/gs/node_modules/gifsicle/vendor/gifsicle')), None)
+    gs = trouver()
+    if not gs:
+        os.makedirs('/tmp/gs', exist_ok=True)
+        subprocess.run(['npm', 'i', 'gifsicle@5', '--silent'], cwd='/tmp/gs', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        gs = trouver()
     if gs:
-        for lossy, cols in ((0, 256), (20, 256), (40, 256), (60, 224), (80, 200), (100, 176)):
-            subprocess.run([gs, '-O3', '--colors', str(cols)] + ([f'--lossy={lossy}'] if lossy else []) + [brut, '-o', sortie], check=True)
-            if os.path.getsize(sortie) < 900_000:
+        for lossy, cols in ((40, 256), (60, 256), (80, 256), (100, 224)):
+            subprocess.run([gs, '-O3', '--colors', str(cols), f'--lossy={lossy}', brut, '-o', sortie], check=True,
+                           stderr=subprocess.DEVNULL)
+            if os.path.getsize(sortie) < 700_000:
                 break
     else:
+        print('ATTENTION : gifsicle introuvable, GIF non compressé', file=sys.stderr)
         shutil.copy(brut, sortie)
     return os.path.getsize(sortie)
 
