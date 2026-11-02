@@ -29,7 +29,7 @@ corps = {
     'html': m['html'],
     'text': m['texte'],
     'reply_to': stop,
-    'headers': {'List-Unsubscribe': f'<mailto:{stop}?subject=STOP>'},
+    'headers': {},
     'tags': [{'name': 'campagne', 'value': 'prospection'}],
 }
 if m.get('in_reply_to'):
