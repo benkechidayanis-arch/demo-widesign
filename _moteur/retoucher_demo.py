@@ -39,6 +39,10 @@ def police(h):
     return h.replace('"Bricolage Grotesque"', '"Archivo"').replace("'Bricolage Grotesque'", "'Archivo'")
 
 
+HERO_CSS = ('<style id="v9-hero">@media(max-width:1023px){.hero .bg:after{background:linear-gradient(180deg,rgba(14,15,13,.9) 0%,rgba(14,15,13,.8) 38%,rgba(14,15,13,.66) 64%,rgba(14,15,13,.3) 82%,rgba(14,15,13,.6) 100%)}}'
+            '.hero .lead{color:rgba(255,255,255,.94);text-shadow:0 1px 12px rgba(0,0,0,.6)}</style>')
+
+
 BUREAU_CSS = '<style id="v9-bureau">@media(min-width:1024px){.h2[style*="max-width"]{max-width:18ch!important}.h2{line-height:.86}.stk{height:min(580px,70vh)}.stp .ph{aspect-ratio:4/3}.stp .tx{padding:22px 22px 24px}.stp h3{font-size:23px}}</style>'
 
 
@@ -49,6 +53,9 @@ def retouches(h):
     if not nom:
         sys.exit("ÉCHEC : nom de l'entreprise introuvable dans le pied de page")
     h = contact_widesign.inserer(h, nom)
+    if 'class="hero"' in h and 'id="v9-hero"' not in h and 'rgba(14,15,13,.66) 64%' not in h:
+        i = h.find('</head>')
+        h = h[:i] + HERO_CSS + h[i:]
     if 'steps2' in h and 'id="v9-bureau"' not in h:
         i = h.find('</head>')
         h = h[:i] + BUREAU_CSS + h[i:]
