@@ -3,7 +3,7 @@
   python3 orchestre.py scan <dossier>
       Lit <dossier>/scans.json (liste des documents scans, champ id + données) et <dossier>/plan.json
       (reglages/plan_auto). Affiche un JSON : {"scan": <document à créer> ou null, "raison": "..."}.
-      Un seul scan par jour (heure de Paris), quota Google gratuit respecté, aucun scan si un autre tourne.
+      plan.scans_par_jour scans par jour (heure de Paris), un à la fois, quota Google gratuit respecté, aucun scan si un autre tourne.
 
   python3 orchestre.py demos <dossier> [max]
       Lit <dossier>/scans.json, <dossier>/demos.json (liste des documents demos), <dossier>/plan.json
@@ -51,6 +51,13 @@ def maintenant():
     return datetime.datetime.now(PARIS)
 
 
+def cle_zone(lat, lng):
+    try:
+        return '%.2f,%.2f' % (float(lat), float(lng))
+    except (TypeError, ValueError):
+        return ''
+
+
 def cle_metiers(noms):
     return '|'.join(sorted(noms))
 
@@ -86,8 +93,9 @@ def cmd_scan(d):
         return {'scan': None, 'raison': 'prospection automatique en pause'}
     now = maintenant()
     jour = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    if any((quand(s.get('cree_le')) or jour - datetime.timedelta(days=1)) >= jour and s.get('auto') for s in scans):
-        return {'scan': None, 'raison': 'scan du jour déjà lancé'}
+    du_jour = sum(1 for s in scans if s.get('auto') and (quand(s.get('cree_le')) or jour - datetime.timedelta(days=1)) >= jour)
+    if du_jour >= int(plan.get('scans_par_jour', 1)):
+        return {'scan': None, 'raison': 'scans du jour déjà lancés (' + str(du_jour) + ')'}
     for s in scans:
         o = scan_occupe(s)
         if o:
@@ -101,10 +109,10 @@ def cmd_scan(d):
     for s in scans:
         if s.get('statut') == 'erreur' and not s.get('auto'):
             continue
-        faits.add((re.sub(r'\W', '', str(s.get('ville', '')).lower()), cle_metiers(m['nom'] for m in s.get('metiers') or [])))
+        faits.add((cle_zone(s.get('lat'), s.get('lng')), cle_metiers(m['nom'] for m in s.get('metiers') or [])))
     for z in plan.get('zones', []):
         for g in plan.get('groupes', []):
-            k = (re.sub(r'\W', '', z['ville'].lower()), cle_metiers(n for _, n in g))
+            k = (cle_zone(z['lat'], z['lng']), cle_metiers(n for _, n in g))
             if k in faits:
                 continue
             metiers = []
@@ -115,7 +123,7 @@ def cmd_scan(d):
                 metiers.append({'id': id_metier(fam, nom), 'nom': nom, 'requete': info['requete'], 'naf': info['naf'], 'famille': fam})
             sid = 's' + base36(int(now.timestamp() * 1000))
             doc = {'id': sid, 'ville': z['ville'], 'lat': z['lat'], 'lng': z['lng'], 'cp': z['cp'],
-                   'rayon_km': z.get('rayon_km', 8), 'metiers': metiers, 'activite_libre': None,
+                   'rayon_km': z.get('rayon_km', 4), 'metiers': metiers, 'activite_libre': None,
                    'plafond_appels': plaf, 'statut': 'demande', 'etape': 'En file', 'progression': 0,
                    'cree_le': datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'), 'auto': True}
             return {'scan': doc, 'raison': z['ville'] + ' : ' + ', '.join(n for _, n in g)}
@@ -135,10 +143,20 @@ def date_fr(t):
     return ('1er' if t.day == 1 else str(t.day)) + ' ' + MOIS[t.month - 1] + ' ' + str(t.year)
 
 
+def zone_de(e, scan):
+    a = (e.get('territoire') or {}).get('agglo')
+    if a:
+        a = re.sub(r"^(Communauté (d'agglomération|de communes|urbaine)|Métropole|CA|CC)\s+(du |de la |des |de l'|d'|de )?", '', a, flags=re.I)
+        a = re.sub(r'\s+(Métropole|Agglomération|Agglo|Communauté)$', '', a, flags=re.I).strip()
+        if a:
+            return a
+    return scan.get('centre_nom') or scan.get('ville') or ''
+
+
 def prompt_demo(e, scan, expire_txt):
     s = e.get('sirene') or {}
     av = e.get('avis_site') or {}
-    zone = scan.get('centre_nom') or scan.get('ville') or ''
+    zone = zone_de(e, scan)
     commune = (e.get('territoire') or {}).get('commune') or e.get('ville') or ''
     L = ['# DONNÉES · DÉMO « ' + e['nom'] + ' »', '',
          'Démo d\'une page construite avec le modèle « Version 9 » (_moteur/gabarit-v9.html, guide _moteur/guide-v9.md) selon les consignes de l\'agent démo.', '',
@@ -199,7 +217,7 @@ def cmd_demos(d, maxi):
     creer = []
     for _, _, e, s in cands[:reste]:
         creer.append({'id': e['id'], 'scan': s['id'], 'nom': e['nom'], 'metier': e.get('metier') or '',
-                      'zone': s.get('centre_nom') or s.get('ville') or '', 'style': 'Version 9', 'modele': 'v9',
+                      'zone': zone_de(e, s), 'style': 'Version 9', 'modele': 'v9',
                       'statut': 'demande', 'prompt': prompt_demo(e, s, date_fr(exp.astimezone(PARIS))),
                       'cree_le': datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'),
                       'expire_le': exp.isoformat().replace('+00:00', 'Z'), 'fichier': 'data/demos/' + e['id'] + '/index.html',
