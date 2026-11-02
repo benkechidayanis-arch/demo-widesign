@@ -46,6 +46,23 @@ HERO_CSS = ('<style id="v9-hero">@media(max-width:1023px){.hero .bg:after{backgr
 BUREAU_CSS = '<style id="v9-bureau">@media(min-width:1024px){.h2[style*="max-width"]{max-width:18ch!important}.h2{line-height:.86}.stk{height:min(580px,70vh)}.stp .ph{aspect-ratio:4/3}.stp .tx{padding:22px 22px 24px}.stp h3{font-size:23px}}</style>'
 
 
+AVIS_JS = [('var rv=(p.reviews||[]).filter(function(r){return r.rating>=4&&r.text&&r.text.length>=40}).slice(0,4);', 'var rv=(p.reviews||[]).filter(function(r){return r.rating>=4&&r.text&&r.text.length>=40}).sort(function(a,b){return a.text.length-b.text.length}).slice(0,4).sort(function(a,b){return b.text.length-a.text.length});\n  var tr=function(t,L){t=String(t).trim();if(t.length<=L+40)return esc(t);var s=t.slice(0,L),j=s.lastIndexOf(" ");if(j>L*.6)s=s.slice(0,j);return \'<span>\'+esc(s.replace(/[\\s,;:.!?-]+$/,""))+\'… </span><button class="plus" type="button" data-t="\'+esc(t)+\'">Lire la suite</button>\'};'), ("<q>'+esc(r.text)+'</q>", "<q>'+tr(r.text,i?170:260)+'</q>"), ('sec.style.display="";ul.querySelectorAll', 'ul.onclick=function(e){var b=e.target.closest&&e.target.closest(".plus");if(b)b.parentNode.textContent=b.getAttribute("data-t")};sec.style.display="";ul.querySelectorAll')]
+AVIS_CSS = '<style id="v9-avis">.av .plus{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--acc);text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap}.av.one .plus{color:var(--acc-ink)}</style>'
+
+
+def avis(h):
+    """Avis Google : les plus courts d'abord, textes longs coupés avec « Lire la suite »."""
+    if 'id="avs"' not in h or 'Lire la suite' in h:
+        return h
+    for a, b in AVIS_JS:
+        if a not in h:
+            return h
+    for a, b in AVIS_JS:
+        h = h.replace(a, b, 1)
+    i = h.find('</head>')
+    return h[:i] + AVIS_CSS + h[i:]
+
+
 def retouches(h):
     """Retouches du modèle v9 appliquées aux démos déjà assemblées (sans effet si déjà présentes)."""
     h = police(h)
@@ -66,7 +83,7 @@ def retouches(h):
             i = h.find('</style>')
             h = h[:i] + CARTE_CSS + h[i:]
             h = h.replace('</body>', CARTE_JS + '</body>', 1)
-    return h
+    return avis(h)
 
 
 MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']

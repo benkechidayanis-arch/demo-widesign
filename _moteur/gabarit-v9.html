@@ -404,6 +404,8 @@ form .btn{width:100%;padding:14px}
 .avsrc{margin-top:14px;color:var(--mut);font-size:12.5px}
 .av .who a{color:inherit;text-decoration:none}
 .av.one .ini{background:rgba(255,255,255,.18);color:var(--acc-ink)}
+.av .plus{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--acc);text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap}
+.av.one .plus{color:var(--acc-ink)}
 
 /* contact : trois blocs */
 .blk{display:flex;align-items:center;gap:14px;background:var(--cr);border-radius:18px;padding:16px 18px}
@@ -835,11 +837,12 @@ footer{background:var(--b900);padding:10px 0 110px}
  var st=function(n){var o="";for(var i=0;i<5;i++)o+=i<n?ETOILE_P_JS:ETOILE_V_JS;return o};
  var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
  window.__avisGo=function(){google.maps.importLibrary("places").then(function(lib){var p=new lib.Place({id:id,requestedLanguage:"fr"});return p.fetchFields({fields:["reviews"]}).then(function(){
-  var rv=(p.reviews||[]).filter(function(r){return r.rating>=4&&r.text&&r.text.length>=40}).slice(0,4);
+  var rv=(p.reviews||[]).filter(function(r){return r.rating>=4&&r.text&&r.text.length>=40}).sort(function(a,b){return a.text.length-b.text.length}).slice(0,4).sort(function(a,b){return b.text.length-a.text.length});
+  var tr=function(t,L){t=String(t).trim();if(t.length<=L+40)return esc(t);var s=t.slice(0,L),j=s.lastIndexOf(" ");if(j>L*.6)s=s.slice(0,j);return '<span>'+esc(s.replace(/[\s,;:.!?-]+$/,""))+'… </span><button class="plus" type="button" data-t="'+esc(t)+'">Lire la suite</button>'};
   if(rv.length<2){sec.remove();return}
   ul.innerHTML=rv.map(function(r,i){var a=r.authorAttribution||{},n=a.displayName||"Client Google",nm=a.uri?'<a href="'+esc(a.uri)+'" target="_blank" rel="noopener">'+esc(n)+'</a>':esc(n);
-   return '<li class="av fx'+(i?"":" one")+'"><span class="stars" aria-label="'+r.rating+' étoiles sur 5">'+st(Math.round(r.rating))+'</span><q>'+esc(r.text)+'</q><div class="who"><span class="ini">'+esc(n.charAt(0).toUpperCase())+'</span><div><b>'+nm+'</b><span>Avis Google'+(r.relativePublishTimeDescription?" · "+esc(r.relativePublishTimeDescription):"")+'</span></div></div></li>'}).join("");
-  sec.style.display="";ul.querySelectorAll(".fx").forEach(function(el){window.__io?window.__io.observe(el):el.classList.add("on")});
+   return '<li class="av fx'+(i?"":" one")+'"><span class="stars" aria-label="'+r.rating+' étoiles sur 5">'+st(Math.round(r.rating))+'</span><q>'+tr(r.text,i?170:260)+'</q><div class="who"><span class="ini">'+esc(n.charAt(0).toUpperCase())+'</span><div><b>'+nm+'</b><span>Avis Google'+(r.relativePublishTimeDescription?" · "+esc(r.relativePublishTimeDescription):"")+'</span></div></div></li>'}).join("");
+  ul.onclick=function(e){var b=e.target.closest&&e.target.closest(".plus");if(b)b.parentNode.textContent=b.getAttribute("data-t")};sec.style.display="";ul.querySelectorAll(".fx").forEach(function(el){window.__io?window.__io.observe(el):el.classList.add("on")});
  })}).catch(function(){sec.remove()})};
  var sc=document.createElement("script");sc.async=true;sc.onerror=function(){sec.remove()};
  sc.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(k)+"&v=weekly&loading=async&language=fr&libraries=places&callback=__avisGo";document.head.appendChild(sc);
