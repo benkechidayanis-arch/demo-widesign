@@ -11,6 +11,9 @@ Outils (dans $O) : gabarit-v9.html, assembler_v9.py, photos_site.py, recadrer.py
 - Interdit : avis ou témoignages écrits à la main, adresse mail, superlatifs invérifiables (« le meilleur », « n°1 », « leader »), tiret cadratin, emoji, nom d'un concurrent.
 - Avis : jamais de texte d'avis dans le fichier. La section « Avis clients » charge les vrais avis Google en direct à chaque visite (règles de Google) ; la liste <ul class="avs" id="avs"> reste vide dans le source.
 - La seule note affichée est la note Google réelle du prompt. Sans note dans le prompt, supprime le bloc <a class="note"> du hero et la section avis.
+- Note du hero : le bloc <a class="note"> du hero n'est gardé que si la note Google est d'au moins 4,5 et qu'il y a au moins 5 avis. Sinon, supprime-le (une note de 3,7 ou « 4/5, 1 avis » en haut de page dessert le prospect).
+- Chiffres : recopie chaque chiffre exactement comme l'entreprise l'écrit. « Plus de 20 ans » reste « plus de 20 ans » ou devient « 20 ans », jamais « 25 ans ». Aucun arrondi vers le haut.
+- Adresse : si l'adresse du site actuel diffère de celle de la fiche Google du prompt, utilise celle du site et signale le désaccord dans le champ message de la démo.
 - Photos : aucune photo où l'on voit une femme (même au second plan, même en partie, même floue), aucun enfant, aucune photo d'animal ou d'illustration sans rapport, aucun visuel avec un gros texte incrusté, aucune capture d'écran, aucune image floue ou pixelisée, aucun filigrane. Chaque photo n'est utilisée qu'une fois, sauf dans la bande de photos qui défile (elle reprend des photos déjà placées).
 - Design : ne touche jamais au CSS (sauf le bloc de couleurs ci-dessous), ni au JavaScript (sauf la date d'expiration), ni à l'ordre des sections, ni aux classes. Les attributs data-gif servent au GIF avant/après : garde-les sur les sections gardées.
 - Ton : français, phrases courtes et concrètes, orientées vers l'appel et la demande de devis.
