@@ -11,6 +11,14 @@
       {"lancer": [ids déjà en statut demande à lancer], "creer": [documents demos à créer], "raison": "..."}.
       Rien si une démo est en cours de fabrication. Plafond de démos créées par jour : plan.demos_par_jour.
 
+  python3 orchestre.py menage <dossier>
+      Garde l'artefact loin de sa limite de 511 fichiers, sans rien perdre d'utile. Lit <dossier>/fichiers.json
+      (sortie de list_files), demos.json, envois.json et scans.json. Affiche un JSON :
+      {"lire": [chemins de l'artefact à copier dans <dossier> puis relancer], "publier": [[chemin local, chemin servi]],
+       "retirer": [chemins servis à supprimer], "maj": {"demos/<id>" ou "scans/<id>": {champ: valeur ou null}}, "fichiers": avant, "apres": après}.
+      Aperçus retirés : démo expirée, en erreur, ou mail parti depuis plus de 14 jours (la démo en ligne reste).
+      Captures retirées 45 jours après la fin du scan. Scans terminés depuis plus de 90 jours rangés dans data/archive-<année>.json.
+
 Les mails ne partent jamais d'ici : Yanis les valide et les envoie lui-même dans l'onglet Envois.
 """
 import datetime, json, os, re, sys, unicodedata, zoneinfo
@@ -246,9 +254,83 @@ def cmd_demos(d, maxi):
             'raison': str(len(creer)) + ' nouvelles démos' if creer else 'aucun prospect en attente de démo'}
 
 
+def cmd_menage(d):
+    brut = lire(os.path.join(d, 'fichiers.json'), [])
+    if isinstance(brut, dict):
+        brut = brut.get('files', [])
+    fichiers = [f['path'] if isinstance(f, dict) else f for f in brut]
+    fs = set(fichiers)
+    demos = {x['id']: x for x in docs(lire(os.path.join(d, 'demos.json'), []))}
+    envois = {x['id']: x for x in docs(lire(os.path.join(d, 'envois.json'), []))}
+    scans = docs(lire(os.path.join(d, 'scans.json'), []))
+    now = datetime.datetime.now(datetime.timezone.utc)
+    retirer, maj, publier, a_lire = set(), {}, [], []
+    # 1. aperçus
+    utiles = set()
+    for x in demos.values():
+        ap = x.get('apercu') or (x.get('fichier') if not x.get('modele') else None)
+        if not ap or not str(ap).startswith('data/'):
+            continue
+        dossier = ap.rsplit('/', 1)[0] + '/'
+        v = envois.get(x['id']) or {}
+        fini = (quand(x.get('expire_le')) or now) < now or x.get('statut') in ('expire', 'erreur')
+        parti = v.get('statut') == 'envoye' and (quand(v.get('envoye_le')) or now) < now - datetime.timedelta(days=14)
+        if fini or parti:
+            retirer |= {p for p in fs if p.startswith(dossier)}
+            m = {k: None for k in ('apercu', 'vignette_app', 'apercu_le') if x.get(k)}
+            if x.get('fichier') and not x.get('modele'):
+                m['fichier'] = None
+            if m:
+                maj['demos/' + x['id']] = m
+        else:
+            utiles.add(dossier)
+            if x.get('vignette_app'):
+                utiles.add(x['vignette_app'])
+    # 2. anciens formats : une capture par fichier
+    retirer |= {p for p in fs if p.startswith('data/captures/')}
+    # 3. captures des scans finis depuis 45 jours, archivage après 90 jours
+    annees = {}
+    for s in scans:
+        fin = quand(s.get('fini_le'))
+        if s.get('statut') != 'termine' or not fin:
+            continue
+        age = (now - fin).days
+        if age > 45:
+            retirer |= {p for p in fs if p == 'data/captures-%s.json' % s['id'] or p.startswith('data/captures-%s-r' % s['id'])}
+        if age > 90 and not s.get('archive') and 'data/scan-%s.json' % s['id'] in fs:
+            annees.setdefault(str(fin.year), []).append(s['id'])
+    for an, ids in annees.items():
+        arch = 'data/archive-%s.json' % an
+        besoin = [p for p in (['data/scan-%s.json' % i for i in ids] + ([arch] if arch in fs else [])) if not os.path.exists(os.path.join(d, os.path.basename(p)))]
+        if besoin:
+            a_lire += besoin
+            continue
+        a = lire(os.path.join(d, os.path.basename(arch)), {}) if arch in fs else {}
+        for i in ids:
+            sc = lire(os.path.join(d, 'scan-%s.json' % i), {})
+            for e in sc.get('entreprises', []):
+                e.pop('captures', None)
+            a[i] = sc
+            retirer.add('data/scan-%s.json' % i)
+            maj['scans/' + i] = {'archive': 'archive-' + an}
+        loc = os.path.join(d, 'archive-%s.json' % an)
+        json.dump(a, open(loc, 'w'), ensure_ascii=False, separators=(',', ':'))
+        publier.append([loc, arch])
+    if a_lire:
+        return {'lire': sorted(set(a_lire)), 'publier': [], 'retirer': [], 'maj': {}, 'fichiers': len(fs), 'apres': len(fs)}
+    retirer = sorted(retirer & fs)
+    apres = len(fs) - len(retirer) + sum(1 for _, p in publier if p not in fs)
+    return {'lire': [], 'publier': publier, 'retirer': retirer, 'maj': maj, 'fichiers': len(fs), 'apres': apres}
+
+
 if __name__ == '__main__':
-    if len(sys.argv) < 3 or sys.argv[1] not in ('scan', 'demos'):
+    if len(sys.argv) < 3 or sys.argv[1] not in ('scan', 'demos', 'menage'):
         sys.exit(__doc__)
+    if sys.argv[1] == 'menage':
+        r = cmd_menage(sys.argv[2])
+        json.dump(r, open(os.path.join(sys.argv[2], 'menage.json'), 'w'), ensure_ascii=False)
+        print(json.dumps({k: (len(v) if k in ('retirer', 'maj') else v) for k, v in r.items()}, ensure_ascii=False))
+        sys.exit(0)
     if sys.argv[1] == 'scan':
         r = cmd_scan(sys.argv[2])
     else:

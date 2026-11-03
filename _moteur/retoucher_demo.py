@@ -127,9 +127,15 @@ def source(dossier, out, fin=None):
 def apercu(src, out, vignette=None):
     base = os.path.dirname(os.path.abspath(src))
     h = retouches(open(src, encoding='utf-8').read())
-    os.makedirs(os.path.join(out, 'img'), exist_ok=True)
-    for p in sorted(set(re.findall(r'img/[A-Za-z0-9_.-]+\.(?:jpg|jpeg|png|svg|webp)', h))):
-        shutil.copy(os.path.join(base, p), os.path.join(out, p))
+    # un seul fichier : les images sont intégrées (data URI), l'application garde ainsi peu de fichiers
+    os.makedirs(out, exist_ok=True)
+    types = {'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png', 'svg': 'image/svg+xml', 'webp': 'image/webp'}
+    def integrer(m):
+        p = os.path.join(base, m.group(0))
+        if not os.path.exists(p):
+            return m.group(0)
+        return 'data:%s;base64,%s' % (types[m.group(1).lower()], base64.b64encode(open(p, 'rb').read()).decode())
+    h = re.sub(r'img/[A-Za-z0-9_.-]+\.(jpg|jpeg|png|svg|webp)', integrer, h)
     open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(h)
     if vignette:
         from PIL import Image
